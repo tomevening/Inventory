@@ -28,7 +28,7 @@
   }
 
   .inventory-item {
-    padding: 5px;
+    padding: 4px;
   }
 
   .inventory {

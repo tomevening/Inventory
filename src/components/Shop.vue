@@ -4,6 +4,7 @@
 
   defineProps<{
     items: ItemClass[];
+    buyItem: (item: ItemClass) => void;
   }>();
 </script>
 
@@ -15,6 +16,7 @@
         :key="item.name"
         class="shop-item"
         :item="item"
+        @click="() => buyItem(item)"
       />
     </div>
   </div>
@@ -28,7 +30,7 @@
   }
 
   .shop-item {
-    padding: 5px;
+    padding: 4px;
   }
 
   .shop {

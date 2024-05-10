@@ -9,7 +9,10 @@
 <template>
   <div class="container">
     <div>
-      <Shop :items="storeGame.items" />
+      <Shop
+        :buy-item="storeGame.buyItem"
+        :items="storeGame.shopOne"
+      />
     </div>
     <div></div>
     <div>

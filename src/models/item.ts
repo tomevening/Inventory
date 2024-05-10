@@ -8,6 +8,6 @@ export class Item {
     this.goldCost = goldCost;
     this.icon = 'itemIcons/' + icon + '.png';
 
-    console.log(`Unit ${this.name} created`);
+    console.log(`Item ${this.name} created`);
   }
 }
