@@ -16,7 +16,10 @@
     </div>
     <div></div>
     <div>
-      <Inventory :items="storeGame.inventory" />
+      <Inventory
+        :items="storeGame.inventory"
+        :sell-item="storeGame.sellItem"
+      />
     </div>
   </div>
 </template>

@@ -4,6 +4,7 @@
 
   defineProps<{
     items: ItemClass[];
+    sellItem: (item: ItemClass) => void;
   }>();
 </script>
 
@@ -15,6 +16,7 @@
         :key="item.name"
         class="inventory-item"
         :item="item"
+        @click.right.prevent="() => sellItem(item)"
       />
     </div>
   </div>
@@ -34,5 +36,7 @@
   .inventory {
     background-color: #c4c4c4;
     display: inline-block;
+    min-height: 250;
+    min-width: 170;
   }
 </style>
