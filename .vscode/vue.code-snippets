@@ -1,0 +1,19 @@
+{
+  "Vue Boilerplate": {
+    "prefix": ["vb"],
+    "body": [
+      "<script setup lang=\"ts\">",
+      "  $2",
+      "</script>",
+      "",
+      "<template>",
+      "  <div>$1</div>",
+      "</template>",
+      "",
+      "<style lang=\"scss\">",
+      "  $3",
+      "</style>"
+    ],
+    "description": "A Vue boilerplate."
+  }
+}

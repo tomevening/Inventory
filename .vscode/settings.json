@@ -1,0 +1,62 @@
+{
+  "editor.formatOnSave": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": [
+    "source.organizeImports",
+    "source.fixAll.format",
+    "source.fixAll.eslint"
+  ],
+  "editor.tabSize": 2,
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "tailwindCSS.classAttributes": [
+    "class",
+    "class-input-box",
+    "move-class",
+    "enter-active-class",
+    "leave-active-class",
+    "enter-from-class",
+    "enter-to-class",
+    "leave-from-class",
+    "leave-to-class"
+  ],
+  "eslint.rules.customizations": [
+    { "rule": "prettier/*", "severity": "off" },
+    { "rule": "vue/html-*", "severity": "off" },
+    { "rule": "vue/multiline-html-*", "severity": "off" },
+    { "rule": "vue/attributes-order", "severity": "off" },
+    { "rule": "vue/first-attribute-linebreak", "severity": "off" },
+    { "rule": "vue/max-attributes-per-line", "severity": "off" },
+    {
+      "rule": "vue/singleline-html-element-content-newline",
+      "severity": "off"
+    }
+  ],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true,
+    // ".nuxt": true,
+    ".output": true,
+    "android": true
+    // "dist": true
+  },
+  "search.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true,
+    ".nuxt": true,
+    ".output": true,
+    "android": true,
+    "dist": true
+  },
+  "editor.linkedEditing": true
+}

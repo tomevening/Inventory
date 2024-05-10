@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "Vue.volar",
+    "Vue.vscode-typescript-vue-plugin",
+    "rohit-gohri.format-code-action",
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
+    "tabnine.tabnine-vscode",
+    "pkief.material-icon-theme",
+    "antfu.iconify",
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    "github.vscode-pull-request-github",
+    "yoavbls.pretty-ts-errors",
+    "vivaxy.vscode-conventional-commits",
+    "gruntfuggly.todo-tree"
+  ],
+  "unwantedRecommendations": ["denoland.vscode-deno"]
+}
