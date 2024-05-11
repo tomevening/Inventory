@@ -36,5 +36,6 @@
   .shop {
     background-color: #c4c4c4;
     display: inline-block;
+    border: 1px solid;
   }
 </style>

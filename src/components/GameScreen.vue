@@ -1,9 +1,14 @@
 <script setup lang="ts">
   import { useStoreGame } from '@/stores';
+  import { computed } from 'vue';
   import Inventory from './Inventory.vue';
   import Shop from './Shop.vue';
 
   const storeGame = useStoreGame();
+
+  const shopSelected = computed(() => {
+    return storeGame.shops[storeGame.selectedShopId];
+  });
 </script>
 
 <template>
@@ -11,7 +16,7 @@
     <div>
       <Shop
         :buy-item="storeGame.buyItem"
-        :items="storeGame.shopOne"
+        :items="shopSelected"
       />
     </div>
     <div></div>

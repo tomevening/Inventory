@@ -4,30 +4,55 @@ import { Item } from '@/models';
 import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
-  const currentGold = shallowRef(1000);
+  const currentGold = shallowRef(1500);
   const maxInventorySize = 6;
+  const selectedShopId = shallowRef(1);
 
-  const item1 = new Item('Ancient Sword', 200);
-  const item2 = new Item('Black Sword', 125);
-  const item3 = new Item('Cursed Sword', 150);
-  const item4 = new Item('Double Sword', 140);
-  const item5 = new Item('Epic Sword', 300);
-  const item6 = new Item('Fire Sword', 250);
-  const item7 = new Item('Fusion Sword', 150);
-  const item8 = new Item('Ice Sword', 240);
-  const item9 = new Item('Steel Sword', 100);
+  const iSwordAnc = new Item('Ancient Sword', 200);
+  const iSwordBlack = new Item('Black Sword', 125);
+  const iSwordCurse = new Item('Cursed Sword', 150);
+  const iSwordDouble = new Item('Double Sword', 140);
+  const iSwordEpic = new Item('Epic Sword', 300);
+  const iSwordFire = new Item('Fire Sword', 250);
+  const iSwordFus = new Item('Fusion Sword', 150);
+  const iSwordIce = new Item('Ice Sword', 240);
+  const iSwordSteel = new Item('Steel Sword', 50);
+
+  const iMiscBlPend = new Item('Blood Pendant', 90);
+  const iMiscBookKnow = new Item('Book of Knowledge', 60);
+  const iMiscEmRing = new Item('Emerald Ring', 80);
+  const iMiscGoldKey = new Item('Golden Key', 50);
+  const iMiscMagHat = new Item('Magic Hat', 40);
+  const iMiscApple = new Item('Red Apple', 20);
+  const iMiscRedSph = new Item('Red Sphere', 65);
+  const iMiscSapRing = new Item('Sapphire Ring', 100);
+  const iRune = new Item('Rune', 50);
 
   const shopOne = [
-    item1,
-    item2,
-    item3,
-    item4,
-    item5,
-    item6,
-    item7,
-    item8,
-    item9,
+    iSwordAnc,
+    iSwordBlack,
+    iSwordCurse,
+    iSwordDouble,
+    iSwordEpic,
+    iSwordFire,
+    iSwordFus,
+    iSwordIce,
+    iSwordSteel,
   ];
+
+  const shopTwo = [
+    iMiscBlPend,
+    iMiscBookKnow,
+    iMiscEmRing,
+    iMiscGoldKey,
+    iMiscMagHat,
+    iMiscApple,
+    iMiscRedSph,
+    iMiscSapRing,
+    iRune,
+  ];
+
+  const shops = [shopOne, shopTwo];
 
   const inventory = shallowReactive<Item[]>([]);
 
@@ -58,9 +83,10 @@ export const useStoreGame = defineStore('storeGame', () => {
   }
 
   return shallowReadonly({
-    shopOne,
+    shops,
     inventory,
     buyItem,
     sellItem,
+    selectedShopId,
   });
 });
