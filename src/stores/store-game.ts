@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 
-import { Item } from '@/models';
+import { Item, Shop } from '@/models';
 import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
   const maxInventorySize = 6;
-  const selectedShopId = shallowRef(1);
+  const selectedShopId = shallowRef(0);
 
   const iSwordAnc = new Item('Ancient Sword', 200);
   const iSwordBlack = new Item('Black Sword', 125);
@@ -18,7 +18,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   const iSwordIce = new Item('Ice Sword', 240);
   const iSwordSteel = new Item('Steel Sword', 50);
 
-  const iMiscBlPend = new Item('Blood Pendant', 90);
+  const iMiscPandAm = new Item('Panda Amulet', 90);
   const iMiscBookKnow = new Item('Book of Knowledge', 60);
   const iMiscEmRing = new Item('Emerald Ring', 80);
   const iMiscGoldKey = new Item('Golden Key', 50);
@@ -28,7 +28,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   const iMiscSapRing = new Item('Sapphire Ring', 100);
   const iRune = new Item('Rune', 50);
 
-  const shopOne = [
+  const swordsShop = new Shop('Sword Shop', [
     iSwordAnc,
     iSwordBlack,
     iSwordCurse,
@@ -38,10 +38,10 @@ export const useStoreGame = defineStore('storeGame', () => {
     iSwordFus,
     iSwordIce,
     iSwordSteel,
-  ];
+  ]);
 
-  const shopTwo = [
-    iMiscBlPend,
+  const miscShop = new Shop('Misc Shop', [
+    iMiscPandAm,
     iMiscBookKnow,
     iMiscEmRing,
     iMiscGoldKey,
@@ -50,9 +50,9 @@ export const useStoreGame = defineStore('storeGame', () => {
     iMiscRedSph,
     iMiscSapRing,
     iRune,
-  ];
+  ]);
 
-  const shops = [shopOne, shopTwo];
+  const shops = [swordsShop, miscShop];
 
   const inventory = shallowReactive<Item[]>([]);
 
@@ -82,11 +82,16 @@ export const useStoreGame = defineStore('storeGame', () => {
     currentGold.value += item.goldCost / 2;
   }
 
+  function selectShop(shopID: number) {
+    selectedShopId.value = shopID;
+  }
+
   return shallowReadonly({
     shops,
     inventory,
     buyItem,
     sellItem,
     selectedShopId,
+    selectShop,
   });
 });

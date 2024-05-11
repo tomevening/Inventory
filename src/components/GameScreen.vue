@@ -12,11 +12,24 @@
 </script>
 
 <template>
-  <div class="container">
+  <div class="flex flex-row p-1 space-x-2 bg-gray-800">
+    <div
+      v-for="shop in storeGame.shops"
+      :key="shop.id"
+    >
+      <img
+        alt="shop.name"
+        class="h-20"
+        :src="shop.icon"
+        @click="() => storeGame.selectShop(storeGame.shops.indexOf(shop))"
+      />
+    </div>
+  </div>
+  <div class="grid-container">
     <div>
       <Shop
         :buy-item="storeGame.buyItem"
-        :items="shopSelected"
+        :items="shopSelected.items"
       />
     </div>
     <div></div>
@@ -30,7 +43,7 @@
 </template>
 
 <style scoped lang="scss">
-  .container {
+  .grid-container {
     display: grid;
     grid-template-columns: 3fr 2fr 1fr;
     gap: 20px;

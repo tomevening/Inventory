@@ -13,7 +13,7 @@
     <div class="shop-grid">
       <Item
         v-for="item in items"
-        :key="item.name"
+        :key="item.id"
         class="shop-item"
         :item="item"
         @click="() => buyItem(item)"

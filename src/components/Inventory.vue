@@ -13,7 +13,7 @@
     <div class="inventory-grid">
       <Item
         v-for="item in items"
-        :key="item.name"
+        :key="item.id"
         class="inventory-item"
         :item="item"
         @click.right.prevent="() => sellItem(item)"
