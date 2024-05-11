@@ -2,10 +2,10 @@ import { Item } from '@/models';
 import { newID } from '@/utils';
 
 export class Shop {
-  name: string;
-  icon: string;
-  items: Item[];
-  id: string;
+  public readonly name: string;
+  public readonly icon: string;
+  public readonly items: Item[];
+  public readonly id: string;
 
   constructor(name: string, items: Item[]) {
     this.name = name;

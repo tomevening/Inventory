@@ -26,12 +26,12 @@ export const useStoreGame = defineStore('storeGame', () => {
   const iMiscApple = new Item('Red Apple', 20);
   const iMiscRedSph = new Item('Red Sphere', 65);
   const iMiscSapRing = new Item('Sapphire Ring', 100);
-  const iRune = new Item('Rune', 50);
+  const iMiscRune = new Item('Rune', 50);
 
   const swordsShop = new Shop('Sword Shop', [
     iSwordAnc,
     iSwordBlack,
-    iSwordCurse,
+    // iSwordCurse,
     iSwordDouble,
     iSwordEpic,
     iSwordFire,
@@ -49,11 +49,23 @@ export const useStoreGame = defineStore('storeGame', () => {
     iMiscApple,
     iMiscRedSph,
     iMiscSapRing,
-    iRune,
+    iMiscRune,
   ]);
 
-  const shops = [swordsShop, miscShop];
+  // const rCursedSword = new Recipe(
+  //
+  //   [iSwordSteel, iMiscRune],
+  //   iSwordCurse,
+  // );
+  // const rBlackSword = new Recipe(
+  //
+  //   [iSwordSteel, iMiscSapRing],
+  //   iSwordBlack,
+  // );
 
+  console.log(iSwordSteel.partOfRecipes);
+
+  const shops = [swordsShop, miscShop];
   const inventory = shallowReactive<Item[]>([]);
 
   function buyItem(item: Item) {
