@@ -57,23 +57,28 @@ export const useStoreGame = defineStore('storeGame', () => {
     iMiscFireCr,
   ]);
 
-  const tierOneShop = new Shop('Tier One Shop', [
-    iSwordEpic,
-    iSwordFire,
-    iSwordDruid,
-  ]);
-
   const rEpicSword = new Recipe(
     [iSwordSteel, iMiscMagHat, iMiscGoldKey],
     iSwordEpic,
+    100,
   );
 
-  const rFireSword = new Recipe([iSwordSteel, iMiscFireCr], iSwordFire);
+  const rFireSword = new Recipe([iSwordSteel, iMiscFireCr], iSwordFire, 150);
 
   const rDruidSword = new Recipe(
     [iSwordStone, iMiscApple, iMiscPandAm],
     iSwordDruid,
+    60,
   );
+
+  const tierOneShop = new Shop('Tier One Shop', [
+    // iSwordEpic,
+    // iSwordFire,
+    // iSwordDruid,
+    rEpicSword,
+    rFireSword,
+    rDruidSword,
+  ]);
 
   console.log(iSwordSteel.partOfRecipes);
 
@@ -117,5 +122,6 @@ export const useStoreGame = defineStore('storeGame', () => {
     sellItem,
     selectedShopId,
     selectShop,
+    currentGold,
   });
 });

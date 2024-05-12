@@ -12,19 +12,25 @@
 </script>
 
 <template>
-  <div class="flex flex-row p-1 space-x-2 bg-gray-800">
-    <div
-      v-for="shop in storeGame.shops"
-      :key="shop.id"
-    >
-      <img
-        alt="shop.name"
-        class="h-20"
-        :src="shop.icon"
-        @click="() => storeGame.selectShop(storeGame.shops.indexOf(shop))"
-      />
+  <div class="top-grid">
+    <div class="flex flex-row p-1 space-x-2 bg-gray-800">
+      <div
+        v-for="shop in storeGame.shops"
+        :key="shop.id"
+      >
+        <img
+          alt="shop.name"
+          class="h-20"
+          :src="shop.icon"
+          @click="() => storeGame.selectShop(storeGame.shops.indexOf(shop))"
+        />
+      </div>
+    </div>
+    <div class="bg-gray-300 flex justify-center items-center text-yellow-600">
+      Gold left: {{ storeGame.currentGold }}
     </div>
   </div>
+
   <div class="grid-container">
     <div>
       <Shop
@@ -48,5 +54,10 @@
     grid-template-columns: 3fr 2fr 1fr;
     gap: 20px;
     padding: 5px;
+  }
+
+  .top-grid {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
   }
 </style>
