@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { Item, Shop } from '@/models';
+import { Item, Recipe, Shop } from '@/models';
 import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
@@ -10,13 +10,16 @@ export const useStoreGame = defineStore('storeGame', () => {
 
   const iSwordAnc = new Item('Ancient Sword', 200);
   const iSwordBlack = new Item('Black Sword', 125);
-  const iSwordCurse = new Item('Cursed Sword', 150);
-  const iSwordDouble = new Item('Double Sword', 140);
+  const iSwordNoble = new Item('Noble Sword', 150);
   const iSwordEpic = new Item('Epic Sword', 300);
   const iSwordFire = new Item('Fire Sword', 250);
   const iSwordFus = new Item('Fusion Sword', 150);
   const iSwordIce = new Item('Ice Sword', 240);
-  const iSwordSteel = new Item('Steel Sword', 50);
+  const iSwordSteel = new Item('Steel Sword', 70);
+  const iSwordStone = new Item('Stone Sword', 40);
+  const iSwordCopper = new Item('Copper Sword', 50);
+  const iSwordDruid = new Item('Druid Sword', 130);
+  const iSwordLong = new Item('Long Sword', 130);
 
   const iMiscPandAm = new Item('Panda Amulet', 90);
   const iMiscBookKnow = new Item('Book of Knowledge', 60);
@@ -27,17 +30,18 @@ export const useStoreGame = defineStore('storeGame', () => {
   const iMiscRedSph = new Item('Red Sphere', 65);
   const iMiscSapRing = new Item('Sapphire Ring', 100);
   const iMiscRune = new Item('Rune', 50);
+  const iMiscFireCr = new Item('Fire Crystall', 50);
 
   const swordsShop = new Shop('Sword Shop', [
-    iSwordAnc,
-    iSwordBlack,
-    // iSwordCurse,
-    iSwordDouble,
-    iSwordEpic,
-    iSwordFire,
-    iSwordFus,
-    iSwordIce,
+    iSwordStone,
+    iSwordCopper,
     iSwordSteel,
+    iSwordAnc,
+    iSwordFus,
+    iSwordLong,
+    iSwordIce,
+    iSwordNoble,
+    iSwordBlack,
   ]);
 
   const miscShop = new Shop('Misc Shop', [
@@ -50,22 +54,30 @@ export const useStoreGame = defineStore('storeGame', () => {
     iMiscRedSph,
     iMiscSapRing,
     iMiscRune,
+    iMiscFireCr,
   ]);
 
-  // const rCursedSword = new Recipe(
-  //
-  //   [iSwordSteel, iMiscRune],
-  //   iSwordCurse,
-  // );
-  // const rBlackSword = new Recipe(
-  //
-  //   [iSwordSteel, iMiscSapRing],
-  //   iSwordBlack,
-  // );
+  const tierOneShop = new Shop('Tier One Shop', [
+    iSwordEpic,
+    iSwordFire,
+    iSwordDruid,
+  ]);
+
+  const rEpicSword = new Recipe(
+    [iSwordSteel, iMiscMagHat, iMiscGoldKey],
+    iSwordEpic,
+  );
+
+  const rFireSword = new Recipe([iSwordSteel, iMiscFireCr], iSwordFire);
+
+  const rDruidSword = new Recipe(
+    [iSwordStone, iMiscApple, iMiscPandAm],
+    iSwordDruid,
+  );
 
   console.log(iSwordSteel.partOfRecipes);
 
-  const shops = [swordsShop, miscShop];
+  const shops = [swordsShop, miscShop, tierOneShop];
   const inventory = shallowReactive<Item[]>([]);
 
   function buyItem(item: Item) {
