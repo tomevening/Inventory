@@ -7,6 +7,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
   const maxInventorySize = 6;
   const selectedShopId = shallowRef(0);
+  const allRecipes = <Recipe[]>[];
 
   const iSwordAnc = new Item('Ancient Sword', 200);
   const iSwordBlack = new Item('Black Sword', 125);
@@ -61,14 +62,21 @@ export const useStoreGame = defineStore('storeGame', () => {
     [iSwordSteel, iMiscMagHat, iMiscGoldKey],
     iSwordEpic,
     100,
+    allRecipes,
   );
 
-  const rFireSword = new Recipe([iSwordSteel, iMiscFireCr], iSwordFire, 150);
+  const rFireSword = new Recipe(
+    [iSwordSteel, iMiscFireCr],
+    iSwordFire,
+    150,
+    allRecipes,
+  );
 
   const rDruidSword = new Recipe(
     [iSwordStone, iMiscApple, iMiscPandAm],
     iSwordDruid,
     60,
+    allRecipes,
   );
 
   const tierOneShop = new Shop('Tier One Shop', [
@@ -99,6 +107,12 @@ export const useStoreGame = defineStore('storeGame', () => {
     inventory.push(item);
     currentGold.value -= item.goldCost;
   }
+
+  // function checkRecipes(item: Item) {
+  //   allRecipes.forEach((recipe) => {
+  //     if(recipe.includes(item))
+  //   })
+  // }
 
   function sellItem(item: Item) {
     const itemIndex = inventory.indexOf(item);
