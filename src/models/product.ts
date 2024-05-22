@@ -1,9 +1,10 @@
+import { ProductIcon } from '@/models/product-icon';
 import { newID } from '@/utils';
 
 export abstract class Product {
   public readonly name: string;
   public readonly goldCost: number;
-  public icon: string;
+  public icon: ProductIcon;
   public readonly id: string;
 
   constructor(name: string, goldCost: number) {
@@ -15,5 +16,5 @@ export abstract class Product {
     console.log(`Item ${this.name} created`);
   }
 
-  abstract setIcon(): string;
+  abstract setIcon(): ProductIcon;
 }

@@ -1,4 +1,5 @@
-import { Product } from '@/models';
+import { Product } from '@/models/product';
+import { ProductIcon } from '@/models/product-icon';
 
 export class Item extends Product {
   // public readonly name: string;
@@ -18,7 +19,8 @@ export class Item extends Product {
     console.log(`Item ${this.name} created`);
   }
 
-  setIcon(): string {
-    return '';
+  setIcon(): ProductIcon {
+    const icon = new ProductIcon(this.name, 255);
+    return icon;
   }
 }

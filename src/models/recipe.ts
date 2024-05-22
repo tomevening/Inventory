@@ -1,4 +1,6 @@
-import { Item, Product } from '@/models';
+import { Item } from '@/models/item';
+import { Product } from '@/models/product';
+import { ProductIcon } from '@/models/product-icon';
 export class Recipe extends Product {
   // private name: string;
   // private goldCost: number;
@@ -33,7 +35,8 @@ export class Recipe extends Product {
   //   );
   // }
 
-  setIcon(): string {
-    return '';
+  setIcon(): ProductIcon {
+    const icon = new ProductIcon(this.name, 100);
+    return icon;
   }
 }
