@@ -1,17 +1,30 @@
 <script setup lang="ts">
   import { Item } from '@/models';
+  import { computed } from 'vue';
 
-  defineProps<{
+  const props = defineProps<{
     item: Item;
   }>();
+
+  const itemClasses = computed(() => {
+    if (!props.item.icon.brightness) {
+      return 'dark';
+    }
+    return '';
+  });
 </script>
 
 <template>
   <img
     alt="item.name"
     class="h-20"
-    :src="item.icon"
+    :class="itemClasses"
+    :src="item.icon.path"
   />
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+  .dark {
+    filter: brightness(50%);
+  }
+</style>
