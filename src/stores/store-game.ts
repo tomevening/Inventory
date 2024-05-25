@@ -1,13 +1,12 @@
 import { defineStore } from 'pinia';
 
-import { Item, Recipe, Shop } from '@/models';
+import { Item, Product, Recipe, Shop } from '@/models';
 import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
   const maxInventorySize = 6;
   const selectedShopId = shallowRef(0);
-  // const allRecipes = <Recipe[]>[];
 
   const iSwordAnc = new Item('Ancient Sword', 200);
   const iSwordBlack = new Item('Black Sword', 125);
@@ -62,21 +61,14 @@ export const useStoreGame = defineStore('storeGame', () => {
     [iSwordSteel, iMiscMagHat, iMiscGoldKey],
     iSwordEpic,
     100,
-    // allRecipes,
   );
 
-  const rFireSword = new Recipe(
-    [iSwordSteel, iMiscFireCr],
-    iSwordFire,
-    150,
-    // allRecipes,
-  );
+  const rFireSword = new Recipe([iSwordSteel, iMiscFireCr], iSwordFire, 150);
 
   const rDruidSword = new Recipe(
     [iSwordStone, iMiscApple, iMiscPandAm],
     iSwordDruid,
     60,
-    // allRecipes,
   );
 
   const tierOneShop = new Shop('Tier One Shop', [
@@ -88,10 +80,8 @@ export const useStoreGame = defineStore('storeGame', () => {
     rDruidSword,
   ]);
 
-  // console.log(iSwordSteel.partOfRecipes);
-
   const shops = [swordsShop, miscShop, tierOneShop];
-  const inventory = shallowReactive<Item[]>([]);
+  const inventory = shallowReactive<Product[]>([]);
 
   function buyItem(item: Item) {
     if (item.goldCost > currentGold.value) {
@@ -104,25 +94,52 @@ export const useStoreGame = defineStore('storeGame', () => {
       return;
     }
 
-    inventory.push(item);
     currentGold.value -= item.goldCost;
+    addItem(item);
   }
 
-  // function checkRecipes(item: Item) {
-  //   allRecipes.forEach((recipe) => {
-  //     if(recipe.includes(item))
-  //   })
-  // }
+  function addItem(product: Product) {
+    inventory.push(product);
+    checkRecipes();
+  }
+
+  function checkRecipes() {
+    const recipies = inventory.filter(
+      (product): product is Recipe => product instanceof Recipe,
+    );
+    const productNames = inventory.map(product => product.name);
+    recipies.forEach(recipe => {
+      console.log('Recipe found');
+      tryAssemblingItem(recipe, productNames);
+    });
+  }
+
+  function tryAssemblingItem(recipe: Recipe, productNames: string[]) {
+    const allPartPresent = recipe.parts.every(part =>
+      productNames.includes(part.name),
+    );
+
+    if (!allPartPresent) return;
+
+    console.log(`Finished recipe found: ${recipe.name}. Combining...`);
+    recipe.parts.forEach(part => removeItem(part));
+    addItem(recipe.result);
+    removeItem(recipe);
+  }
 
   function sellItem(item: Item) {
-    const itemIndex = inventory.indexOf(item);
+    currentGold.value += item.goldCost / 2;
+    removeItem(item);
+  }
+
+  function removeItem(product: Product) {
+    const itemIndex = inventory.indexOf(product);
     if (itemIndex === -1) {
       console.log('Item not found');
       return;
     }
 
     inventory.splice(itemIndex, 1);
-    currentGold.value += item.goldCost / 2;
   }
 
   function selectShop(shopID: number) {

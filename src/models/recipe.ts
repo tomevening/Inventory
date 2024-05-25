@@ -2,8 +2,8 @@ import { Item } from '@/models/item';
 import { Product } from '@/models/product';
 import { ProductIcon } from '@/models/product-icon';
 export class Recipe extends Product {
-  private parts: Item[];
-  private result: Item;
+  public readonly parts: Item[];
+  public readonly result: Item;
 
   constructor(parts: Item[], result: Item, goldCost: number) {
     super(result.name, goldCost);
