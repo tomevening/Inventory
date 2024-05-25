@@ -11,4 +11,8 @@ export class Item extends Product {
     const icon = new ProductIcon(this.name, 1);
     return icon;
   }
+
+  public clone<T extends Product>(): T {
+    return new Item(this.name, this.goldCost) as T;
+  }
 }

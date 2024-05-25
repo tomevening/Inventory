@@ -16,4 +16,12 @@ export class Recipe extends Product {
     const icon = new ProductIcon(this.name, 0);
     return icon;
   }
+
+  public clone<T extends Product>(): T {
+    return new Recipe(this.parts, this.result, this.goldCost) as unknown as T;
+  }
+
+  // public clone() {
+  //   return new Recipe(this.parts, this.result, this.goldCost);
+  // }
 }

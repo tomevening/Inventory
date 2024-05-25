@@ -17,4 +17,5 @@ export abstract class Product {
   }
 
   abstract setIcon(): ProductIcon;
+  public abstract clone<T extends Product>(): T;
 }

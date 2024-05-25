@@ -11,14 +11,14 @@ export const useStoreGame = defineStore('storeGame', () => {
   const iSwordAnc = new Item('Ancient Sword', 200);
   const iSwordBlack = new Item('Black Sword', 125);
   const iSwordNoble = new Item('Noble Sword', 150);
-  const iSwordEpic = new Item('Epic Sword', 300);
-  const iSwordFire = new Item('Fire Sword', 250);
+  const iSwordEpic = new Item('Epic Sword', 500);
+  const iSwordFire = new Item('Fire Sword', 400);
   const iSwordFus = new Item('Fusion Sword', 150);
   const iSwordIce = new Item('Ice Sword', 240);
   const iSwordSteel = new Item('Steel Sword', 70);
   const iSwordStone = new Item('Stone Sword', 40);
   const iSwordCopper = new Item('Copper Sword', 50);
-  const iSwordDruid = new Item('Druid Sword', 130);
+  const iSwordDruid = new Item('Druid Sword', 420);
   const iSwordLong = new Item('Long Sword', 130);
 
   const iMiscPandAm = new Item('Panda Amulet', 90);
@@ -72,9 +72,6 @@ export const useStoreGame = defineStore('storeGame', () => {
   );
 
   const tierOneShop = new Shop('Tier One Shop', [
-    // iSwordEpic,
-    // iSwordFire,
-    // iSwordDruid,
     rEpicSword,
     rFireSword,
     rDruidSword,
@@ -83,8 +80,8 @@ export const useStoreGame = defineStore('storeGame', () => {
   const shops = [swordsShop, miscShop, tierOneShop];
   const inventory = shallowReactive<Product[]>([]);
 
-  function buyItem(item: Item) {
-    if (item.goldCost > currentGold.value) {
+  function buyItem(product: Product) {
+    if (product.goldCost > currentGold.value) {
       console.log('Not enough gold to buy!');
       return;
     }
@@ -94,12 +91,12 @@ export const useStoreGame = defineStore('storeGame', () => {
       return;
     }
 
-    currentGold.value -= item.goldCost;
-    addItem(item);
+    currentGold.value -= product.goldCost;
+    addItem(product);
   }
 
   function addItem(product: Product) {
-    inventory.push(product);
+    inventory.push(product.clone());
     checkRecipes();
   }
 
@@ -122,17 +119,18 @@ export const useStoreGame = defineStore('storeGame', () => {
     if (!allPartPresent) return;
 
     console.log(`Finished recipe found: ${recipe.name}. Combining...`);
-    recipe.parts.forEach(part => removeItem(part));
+    recipe.parts.forEach(part => removeItemByName(part.name));
     addItem(recipe.result);
     removeItem(recipe);
   }
 
-  function sellItem(item: Item) {
-    currentGold.value += item.goldCost / 2;
-    removeItem(item);
+  function sellItem(product: Product) {
+    currentGold.value += product.goldCost / 2;
+    removeItem(product);
   }
 
   function removeItem(product: Product) {
+    console.log(product);
     const itemIndex = inventory.indexOf(product);
     if (itemIndex === -1) {
       console.log('Item not found');
@@ -140,6 +138,12 @@ export const useStoreGame = defineStore('storeGame', () => {
     }
 
     inventory.splice(itemIndex, 1);
+  }
+
+  function removeItemByName(productName: string) {
+    const item = inventory.find(product => product.name === productName);
+    if (!item) return;
+    removeItem(item);
   }
 
   function selectShop(shopID: number) {
