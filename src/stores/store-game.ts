@@ -125,7 +125,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   }
 
   function sellItem(product: Product) {
-    currentGold.value += product.goldCost / 2;
+    currentGold.value += Math.round(product.goldCost / 2);
     removeItem(product);
   }
 

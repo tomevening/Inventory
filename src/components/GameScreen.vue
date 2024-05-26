@@ -15,13 +15,19 @@
   <div class="top-grid">
     <div class="flex flex-row p-1 space-x-2 bg-gray-800">
       <div
-        v-for="shop in storeGame.shops"
+        v-for="(shop, index) in storeGame.shops"
         :key="shop.id"
       >
         <img
           alt="shop.name"
           class="h-20"
           :src="shop.icon"
+          :style="{
+            'box-shadow':
+              storeGame.selectedShopId === index
+                ? '0 0 15px rgba(255,255,200,1)'
+                : 'none',
+          }"
           @click="() => storeGame.selectShop(storeGame.shops.indexOf(shop))"
         />
       </div>
