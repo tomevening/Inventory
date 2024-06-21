@@ -2,6 +2,7 @@
   import { useStoreGame } from '@/stores';
   import { computed } from 'vue';
   import Inventory from './Inventory.vue';
+  import PlayerStats from './PlayerStats.vue';
   import Shop from './Shop.vue';
 
   const storeGame = useStoreGame();
@@ -52,6 +53,7 @@
       />
     </div>
   </div>
+  <PlayerStats class="player-stats" />
 </template>
 
 <style scoped lang="scss">
@@ -65,5 +67,16 @@
   .top-grid {
     display: grid;
     grid-template-columns: 5fr 1fr;
+  }
+
+  .player-stats {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(255, 0, 0, 0.4);
   }
 </style>

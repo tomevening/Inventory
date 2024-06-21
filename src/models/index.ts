@@ -1,3 +1,4 @@
+export * from './attribute';
 export * from './item';
 export * from './product';
 export * from './product-icon';
