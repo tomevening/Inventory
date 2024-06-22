@@ -18,6 +18,7 @@ export class Attribute {
     result += this.numberIncrease;
     result += result * (this.percentageIcrease / 100);
     result *= this.multiplyer;
+    result = +result.toFixed(1);
     console.log(result);
     return result;
   }

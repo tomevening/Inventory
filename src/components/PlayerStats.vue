@@ -10,15 +10,15 @@
     <div>Strength: {{ storeAttribute.strength.result }}</div>
     <div>Agility: {{ storeAttribute.agility.result }}</div>
     <div>Intelligence: {{ storeAttribute.intelligence.result }}</div>
-    <div>Attack speed: {{ storeAttribute.attackSpeed.result }}</div>
+    <div>Attack cooldown: {{ storeAttribute.attackCooldown }}</div>
     <div>Critical chance: {{ storeAttribute.critChance.result }}</div>
     <div>Critical damage: {{ storeAttribute.critDamage.result }}</div>
-    <div>Armor: 10</div>
-    <div>Damage: 10</div>
-    <div>Health points: 10</div>
-    <div>Mana points: 10</div>
-    <div>DPS: 10</div>
-    <div>DPS with crit: 10</div>
+    <div>Armor: {{ storeAttribute.armor }}</div>
+    <div>Damage: {{ storeAttribute.damage }}</div>
+    <div>Health points: {{ storeAttribute.health }}</div>
+    <div>Mana points: {{ storeAttribute.mana }}</div>
+    <div>DPS: {{ storeAttribute.DPS }}</div>
+    <div>DPS with crit: {{ storeAttribute.CritDPS }}</div>
   </div>
 </template>
 
