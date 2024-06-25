@@ -1,14 +1,14 @@
-const EAttribute = {
-  STR: 'strength',
-  AGI: 'agility',
-  INT: 'intelligence',
-  ACD: 'attackCooldown',
-  CRCH: 'critChance',
-  CDMG: 'critDamage',
-  ARM: 'armor',
+export const EAttribute = {
+  STRENGTH: 'strength',
+  AGILITY: 'agility',
+  INTELLIGENCE: 'intelligence',
+  ATKCOOLDOWN: 'attackCooldown',
+  CRITCHANCE: 'critChance',
+  CRITDMG: 'critDamage',
+  ARMOR: 'armor',
   DMG: 'damage',
-  HP: 'health',
-  MP: 'mana',
+  HEALTH: 'health',
+  MANA: 'mana',
 } as const;
 
 export type EAttribute = (typeof EAttribute)[keyof typeof EAttribute];

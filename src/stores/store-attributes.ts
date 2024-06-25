@@ -1,29 +1,41 @@
 import { defineStore } from 'pinia';
 
+import { EAttribute } from '@/enums';
 import { Attribute } from '@/models';
-import { computed, reactive, shallowReadonly } from 'vue';
+import { computed, shallowReadonly } from 'vue';
 
 export const useStoreAttributes = defineStore('storeAttributes', () => {
-  const strength = reactive(new Attribute(10));
-  strength.percentageIcrease = 50; // TODO: remove
-  const agility = reactive(new Attribute(10));
-  const intelligence = reactive(new Attribute(10));
-  const critChance = reactive(new Attribute(10));
-  const critDamage = reactive(new Attribute(2));
+  const attrubutes = new Map<EAttribute, Attribute>();
 
-  const armorBase = reactive(new Attribute(10));
+  const strength = Attribute.create(10);
+  strength.percentageIcrease = 50; // TODO: Optional, remove later
+  attrubutes.set(EAttribute.STRENGTH, strength);
+
+  const agility = Attribute.create(10);
+  attrubutes.set(EAttribute.AGILITY, agility);
+
+  const intelligence = Attribute.create(10);
+  attrubutes.set(EAttribute.INTELLIGENCE, intelligence);
+
+  const critChance = Attribute.create(10);
+  attrubutes.set(EAttribute.CRITCHANCE, critChance);
+
+  const critDamage = Attribute.create(2);
+  attrubutes.set(EAttribute.CRITDMG, critDamage);
+
+  const armorBase = Attribute.create(10);
   const armor = computed(() => armorBase.result + 0.2 * agility.result);
 
-  const damageBase = reactive(new Attribute(10));
+  const damageBase = Attribute.create(10);
   const damage = computed(() => damageBase.result + strength.result); // TODO: Add max of three main stats
 
-  const healthBase = reactive(new Attribute(100));
+  const healthBase = Attribute.create(100);
   const health = computed(() => healthBase.result + strength.result * 6);
 
-  const manaBase = reactive(new Attribute(100));
+  const manaBase = Attribute.create(100);
   const mana = computed(() => manaBase.result + intelligence.result * 6);
 
-  const attackSpeedBase = reactive(new Attribute(2));
+  const attackSpeedBase = Attribute.create(2);
   const attackSpeed = computed(
     () => attackSpeedBase.result + 0.01 * agility.result,
   );
