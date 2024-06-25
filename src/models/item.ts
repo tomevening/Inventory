@@ -1,5 +1,6 @@
 import { Product } from '@/models/product';
 import { ProductIcon } from '@/models/product-icon';
+
 export class Item extends Product {
   constructor(name: string, goldCost: number) {
     super(name, goldCost);
@@ -13,6 +14,7 @@ export class Item extends Product {
   }
 
   public clone<T extends Product>(): T {
+    // TODO: Fix
     return new Item(this.name, this.goldCost) as T;
   }
 }

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { AttributeModifier } from './../types/attribute-modifier';
 
 import { Item, Product, Recipe, Shop } from '@/models';
 import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
@@ -98,6 +99,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   function addItem(product: Product) {
     inventory.push(product.clone());
     checkRecipes();
+    refreshAttributes();
   }
 
   function checkRecipes() {
@@ -136,8 +138,8 @@ export const useStoreGame = defineStore('storeGame', () => {
       console.log('Item not found');
       return;
     }
-
     inventory.splice(itemIndex, 1);
+    refreshAttributes();
   }
 
   function removeItemByName(productName: string) {
@@ -148,6 +150,30 @@ export const useStoreGame = defineStore('storeGame', () => {
 
   function selectShop(shopID: number) {
     selectedShopId.value = shopID;
+  }
+
+  function refreshAttributes() {
+    inventory.forEach(item => applyItemAttributes(item));
+  }
+
+  function applyItemAttributes(product: Product) {
+    if (product.attributes.length === 0) return;
+    product.attributes.forEach(item => applyItemAttribute(item));
+  }
+
+  function applyItemAttribute(modifier: AttributeModifier) {
+    const attributeName = `${modifier.attribute}`;
+    switch (modifier.type) {
+      case 'increase':
+        attributes[attributeName] += modifier.value;
+        break;
+      case 'percentage':
+        attributes[attributeName] *= 1 + modifier.value / 100;
+        break;
+      case 'multiplier':
+        attributes[attributeName] *= modifier.value;
+        break;
+    }
   }
 
   return shallowReadonly({

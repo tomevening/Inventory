@@ -15,7 +15,7 @@ export const useStoreAttributes = defineStore('storeAttributes', () => {
   const armor = computed(() => armorBase.result + 0.2 * agility.result);
 
   const damageBase = reactive(new Attribute(10));
-  const damage = computed(() => damageBase.result + strength.result);
+  const damage = computed(() => damageBase.result + strength.result); // TODO: Add max of three main stats
 
   const healthBase = reactive(new Attribute(100));
   const health = computed(() => healthBase.result + strength.result * 6);
