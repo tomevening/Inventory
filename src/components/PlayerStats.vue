@@ -1,24 +1,36 @@
 <script setup lang="ts">
-  // TODO: Do not import it here
-  import { useStoreAttributes } from '@/stores';
+  import { EAttribute } from '@/enums';
+  import { Attribute } from '@/models';
 
-  const storeAttribute = useStoreAttributes();
+  const props = defineProps<{
+    attributes: Map<EAttribute, Attribute>;
+    dps: number;
+    critDps: number;
+  }>();
+
+  console.log(props.attributes.get(EAttribute.STRENGTH)?.result);
 </script>
 
 <template>
   <div class="stats">
-    <div>Strength: {{ storeAttribute.strength.result }}</div>
-    <div>Agility: {{ storeAttribute.agility.result }}</div>
-    <div>Intelligence: {{ storeAttribute.intelligence.result }}</div>
-    <div>Attack cooldown: {{ storeAttribute.attackCooldown }}</div>
-    <div>Critical chance: {{ storeAttribute.critChance.result }}</div>
-    <div>Critical damage: {{ storeAttribute.critDamage.result }}</div>
-    <div>Armor: {{ storeAttribute.armor }}</div>
-    <div>Damage: {{ storeAttribute.damage }}</div>
-    <div>Health points: {{ storeAttribute.health }}</div>
-    <div>Mana points: {{ storeAttribute.mana }}</div>
-    <div>DPS: {{ storeAttribute.DPS }}</div>
-    <div>DPS with crit: {{ storeAttribute.CritDPS }}</div>
+    <div>Strength: {{ attributes.get(EAttribute.STRENGTH)?.result }}</div>
+    <div>Agility: {{ attributes.get(EAttribute.AGILITY)?.result }}</div>
+    <div>
+      Intelligence: {{ attributes.get(EAttribute.INTELLIGENCE)?.result }}
+    </div>
+    <div>
+      Attack speed: {{ attributes.get(EAttribute.ATTACKSPEED)?.result }}
+    </div>
+    <div>
+      Critical chance: {{ attributes.get(EAttribute.CRITCHANCE)?.result }}
+    </div>
+    <div>Critical damage: {{ attributes.get(EAttribute.CRITDMG)?.result }}</div>
+    <div>Armor: {{ attributes.get(EAttribute.ARMOR)?.result }}</div>
+    <div>Damage: {{ attributes.get(EAttribute.DMG)?.result }}</div>
+    <div>Health points: {{ attributes.get(EAttribute.HEALTH)?.result }}</div>
+    <div>Mana points: {{ attributes.get(EAttribute.MANA)?.result }}</div>
+    <div>DPS: {{ dps }}</div>
+    <div>DPS with crit: {{ critDps }}</div>
   </div>
 </template>
 

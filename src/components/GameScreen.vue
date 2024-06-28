@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  import { useStoreGame } from '@/stores';
+  import { useStoreAttributes, useStoreGame } from '@/stores';
   import { computed } from 'vue';
   import Inventory from './Inventory.vue';
   import PlayerStats from './PlayerStats.vue';
   import Shop from './Shop.vue';
 
   const storeGame = useStoreGame();
+  const storeAttributes = useStoreAttributes();
 
   const shopSelected = computed(() => {
     return storeGame.shops[storeGame.selectedShopId];
@@ -53,7 +54,12 @@
       />
     </div>
   </div>
-  <PlayerStats class="player-stats" />
+  <PlayerStats
+    :attributes="storeAttributes.attributes"
+    :dps="storeAttributes.DPS"
+    :crit-dps="storeAttributes.CritDPS"
+    class="player-stats"
+  />
 </template>
 
 <style scoped lang="scss">
