@@ -13,24 +13,47 @@
 
 <template>
   <div class="stats">
-    <div>Strength: {{ attributes.get(EAttribute.STRENGTH)?.result }}</div>
-    <div>Agility: {{ attributes.get(EAttribute.AGILITY)?.result }}</div>
+    <!-- <div>
+      <div
+        v-for="[attributeType, attribute] in attributes"
+        :key="attributeType"
+      >
+        {{ attributeType }}: {{ attribute.result?.toFixed(1) }}
+      </div>
+    </div> -->
+
     <div>
-      Intelligence: {{ attributes.get(EAttribute.INTELLIGENCE)?.result }}
+      Strength: {{ attributes.get(EAttribute.STRENGTH)?.result?.toFixed(1) }}
     </div>
     <div>
-      Attack speed: {{ attributes.get(EAttribute.ATTACKSPEED)?.result }}
+      Agility: {{ attributes.get(EAttribute.AGILITY)?.result?.toFixed(1) }}
     </div>
     <div>
-      Critical chance: {{ attributes.get(EAttribute.CRITCHANCE)?.result }}
+      Intelligence:
+      {{ attributes.get(EAttribute.INTELLIGENCE)?.result?.toFixed(1) }}
     </div>
-    <div>Critical damage: {{ attributes.get(EAttribute.CRITDMG)?.result }}</div>
-    <div>Armor: {{ attributes.get(EAttribute.ARMOR)?.result }}</div>
-    <div>Damage: {{ attributes.get(EAttribute.DMG)?.result }}</div>
-    <div>Health points: {{ attributes.get(EAttribute.HEALTH)?.result }}</div>
-    <div>Mana points: {{ attributes.get(EAttribute.MANA)?.result }}</div>
-    <div>DPS: {{ dps }}</div>
-    <div>DPS with crit: {{ critDps }}</div>
+    <div>
+      Attack speed:
+      {{ attributes.get(EAttribute.ATTACKSPEED)?.result?.toFixed(1) }}
+    </div>
+    <div>
+      Critical chance:
+      {{ attributes.get(EAttribute.CRITCHANCE)?.result?.toFixed(1) }}
+    </div>
+    <div>
+      Critical damage:
+      {{ attributes.get(EAttribute.CRITDMG)?.result?.toFixed(1) }}
+    </div>
+    <div>Armor: {{ attributes.get(EAttribute.ARMOR)?.result?.toFixed(1) }}</div>
+    <div>Damage: {{ attributes.get(EAttribute.DMG)?.result?.toFixed(1) }}</div>
+    <div>
+      Health points: {{ attributes.get(EAttribute.HEALTH)?.result?.toFixed(1) }}
+    </div>
+    <div>
+      Mana points: {{ attributes.get(EAttribute.MANA)?.result?.toFixed(1) }}
+    </div>
+    <div>DPS: {{ dps?.toFixed(1) }}</div>
+    <div>DPS with crit: {{ critDps?.toFixed(1) }}</div>
   </div>
 </template>
 

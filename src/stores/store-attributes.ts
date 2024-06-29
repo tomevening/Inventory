@@ -7,8 +7,8 @@ import { computed, shallowReadonly, watchEffect } from 'vue';
 export const useStoreAttributes = defineStore('storeAttributes', () => {
   const attributes = new Map<EAttribute, Attribute>();
 
-  const strength = Attribute.create(10);
-  strength.percentageIncreases.push(25);
+  const strength = Attribute.create(11);
+  strength.percentageIncreases.push(26.001);
   strength.percentageIncreases.push(25);
   attributes.set(EAttribute.STRENGTH, strength as Attribute);
 
@@ -28,7 +28,7 @@ export const useStoreAttributes = defineStore('storeAttributes', () => {
     attackSpeed.setBaseAttributeIncrement(agility.result * 0.2),
   );
   attributes.set(EAttribute.ATTACKSPEED, attackSpeed as Attribute);
-  const attackCooldown = computed(() => +(1 / attackSpeed.result).toFixed(2));
+  const attackCooldown = computed(() => 1 / attackSpeed.result);
 
   const intelligence = Attribute.create(10);
   attributes.set(EAttribute.INTELLIGENCE, intelligence as Attribute);
@@ -51,29 +51,16 @@ export const useStoreAttributes = defineStore('storeAttributes', () => {
   );
   attributes.set(EAttribute.DMG, damage as Attribute);
 
-  const DPS = computed(
-    () => +(damage.result * (1 / attackCooldown.value)).toFixed(2),
-  );
+  const DPS = computed(() => damage.result * (1 / attackCooldown.value));
 
   const CritDPS = computed(() => {
-    return +(
+    return (
       DPS.value +
       DPS.value * ((critChance.result / 100) * (critDamage.result - 1))
-    ).toFixed(2);
+    );
   });
 
   return shallowReadonly({
-    // strength,
-    // agility,
-    // intelligence,
-    // critChance,
-    // critDamage,
-    // armor,
-    // damage,
-    // health,
-    // mana,
-    // attackSpeed,
-    // attackCooldown,
     DPS,
     CritDPS,
     attributes,
