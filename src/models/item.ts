@@ -1,9 +1,14 @@
 import { Product } from '@/models/product';
 import { ProductIcon } from '@/models/product-icon';
+import { AttributeModifier } from '@/types';
 
-export class Item extends Product {
-  constructor(name: string, goldCost: number) {
+export class Item extends Product<Item> {
+  public readonly modifiers: AttributeModifier[];
+
+  constructor(name: string, goldCost: number, modifiers?: AttributeModifier[]) {
     super(name, goldCost);
+
+    modifiers ? (this.modifiers = modifiers) : (this.modifiers = []);
 
     console.log(`Item ${this.name} created`);
   }
@@ -13,8 +18,7 @@ export class Item extends Product {
     return icon;
   }
 
-  public clone<T extends Product>(): T {
-    // TODO: Fix
-    return new Item(this.name, this.goldCost) as T;
+  public clone(): Item {
+    return new Item(this.name, this.goldCost);
   }
 }

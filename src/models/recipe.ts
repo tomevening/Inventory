@@ -1,7 +1,7 @@
 import { Item } from '@/models/item';
 import { Product } from '@/models/product';
 import { ProductIcon } from '@/models/product-icon';
-export class Recipe extends Product {
+export class Recipe extends Product<Recipe> {
   public readonly parts: Item[];
   public readonly result: Item;
 
@@ -17,8 +17,8 @@ export class Recipe extends Product {
     return icon;
   }
 
-  public clone<T extends Product>(): T {
-    return new Recipe(this.parts, this.result, this.goldCost) as unknown as T;
+  public clone() {
+    return new Recipe(this.parts, this.result, this.goldCost);
   }
 
   // public clone() {

@@ -1,7 +1,7 @@
 import { ProductIcon } from '@/models/product-icon';
 import { AttributeModifier } from '@/types';
 import { newID } from '@/utils';
-export abstract class Product {
+export abstract class Product<T extends Product<T>> {
   public readonly name: string;
   public readonly goldCost: number;
   public icon: ProductIcon;
@@ -24,5 +24,5 @@ export abstract class Product {
   }
 
   abstract setIcon(): ProductIcon;
-  public abstract clone<T extends Product>(): T;
+  public abstract clone(): T;
 }

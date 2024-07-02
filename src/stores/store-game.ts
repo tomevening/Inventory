@@ -1,8 +1,8 @@
+import { EAttribute } from '@/enums';
 import { defineStore } from 'pinia';
-import { AttributeModifier } from './../types/attribute-modifier';
 
 import { Item, Product, Recipe, Shop } from '@/models';
-import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
+import { computed, shallowReactive, shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
@@ -11,7 +11,9 @@ export const useStoreGame = defineStore('storeGame', () => {
 
   const iSwordAnc = new Item('Ancient Sword', 200);
   const iSwordBlack = new Item('Black Sword', 125);
-  const iSwordNoble = new Item('Noble Sword', 150);
+  const iSwordNoble = new Item('Noble Sword', 150, [
+    { attribute: EAttribute.STRENGTH, type: 'increase', value: 10 },
+  ]);
   const iSwordEpic = new Item('Epic Sword', 500);
   const iSwordFire = new Item('Fire Sword', 400);
   const iSwordFus = new Item('Fusion Sword', 150);
@@ -79,9 +81,9 @@ export const useStoreGame = defineStore('storeGame', () => {
   ]);
 
   const shops = [swordsShop, miscShop, tierOneShop];
-  const inventory = shallowReactive<Product[]>([]);
+  const inventory = shallowReactive<Product<Item | Recipe>[]>([]);
 
-  function buyItem(product: Product) {
+  function buyItem(product: Product<any>) {
     if (product.goldCost > currentGold.value) {
       console.log('Not enough gold to buy!');
       return;
@@ -96,10 +98,10 @@ export const useStoreGame = defineStore('storeGame', () => {
     addItem(product);
   }
 
-  function addItem(product: Product) {
+  function addItem(product: Product<any>) {
     inventory.push(product.clone());
     checkRecipes();
-    refreshAttributes();
+    // refreshAttributes();
   }
 
   function checkRecipes() {
@@ -126,12 +128,12 @@ export const useStoreGame = defineStore('storeGame', () => {
     removeItem(recipe);
   }
 
-  function sellItem(product: Product) {
+  function sellItem(product: Product<any>) {
     currentGold.value += Math.round(product.goldCost / 2);
     removeItem(product);
   }
 
-  function removeItem(product: Product) {
+  function removeItem(product: Product<any>) {
     console.log(product);
     const itemIndex = inventory.indexOf(product);
     if (itemIndex === -1) {
@@ -139,7 +141,7 @@ export const useStoreGame = defineStore('storeGame', () => {
       return;
     }
     inventory.splice(itemIndex, 1);
-    refreshAttributes();
+    // refreshAttributes();
   }
 
   function removeItemByName(productName: string) {
@@ -152,29 +154,48 @@ export const useStoreGame = defineStore('storeGame', () => {
     selectedShopId.value = shopID;
   }
 
-  function refreshAttributes() {
-    inventory.forEach(item => applyItemAttributes(item));
-  }
-
-  function applyItemAttributes(product: Product) {
-    if (product.attributes.length === 0) return;
-    product.attributes.forEach(item => applyItemAttribute(item));
-  }
-
-  function applyItemAttribute(modifier: AttributeModifier) {
-    const attributeName = `${modifier.attribute}`;
-    switch (modifier.type) {
-      case 'increase':
-        attributes[attributeName] += modifier.value;
-        break;
-      case 'percentage':
-        attributes[attributeName] *= 1 + modifier.value / 100;
-        break;
-      case 'multiplier':
-        attributes[attributeName] *= modifier.value;
-        break;
+  const currentModifiers = computed(() => {
+    const modifiers = [];
+    for (const item of inventory) {
+      modifiers.push(...item.attributes);
     }
-  }
+    return modifiers;
+  });
+
+  // const currentModifiers = computed(()=>{
+  //   const mofidiers = new Array<AttributeModifier>();
+  //   inventory.forEach((item)=>{
+  //     item.attributes.forEach((attribute)=>{
+  //       mofidiers.push(attribute)
+
+  //     })
+  //   })
+  //   return mofidiers;
+  // })
+
+  // function refreshAttributes() {
+  //   inventory.forEach(item => applyItemAttributes(item));
+  // }
+
+  // function applyItemAttributes(product: Product<any>) {
+  //   if (product.attributes.length === 0) return;
+  //   product.attributes.forEach(item => applyItemAttribute(item));
+  // }
+
+  // function applyItemAttribute(modifier: AttributeModifier) {
+  //   const attributeName = `${modifier.attribute}`;
+  //   // switch (modifier.type) {
+  //   //   case 'increase':
+  //   //     attributes[attributeName] += modifier.value;
+  //   //     break;
+  //   //   case 'percentage':
+  //   //     attributes[attributeName] *= 1 + modifier.value / 100;
+  //   //     break;
+  //   //   case 'multiplier':
+  //   //     attributes[attributeName] *= modifier.value;
+  //   //     break;
+  //   // }
+  // }
 
   return shallowReadonly({
     shops,
