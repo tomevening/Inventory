@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { Item } from '@/models';
+  import { Product } from '@/models';
   import { computed } from 'vue';
 
   const props = defineProps<{
-    item: Item;
+    item: Product<any>;
   }>();
 
   const itemClasses = computed(() => {

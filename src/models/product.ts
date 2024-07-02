@@ -20,7 +20,7 @@ export abstract class Product<T extends Product<T>> {
     if (!attributes) this.attributes = [];
     else this.attributes = attributes;
 
-    console.log(`Item ${this.name} created`);
+    // console.log(`Item ${this.name} created`);
   }
 
   abstract setIcon(): ProductIcon;

@@ -22,7 +22,7 @@ export class Attribute {
     result *= this.calculateMultipliers();
 
     // result = +result.toFixed(1);
-    console.log(result);
+    // console.log(result);
     return result;
   }
 

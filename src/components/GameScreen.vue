@@ -49,7 +49,7 @@
     <div></div>
     <div>
       <Inventory
-        :items="storeGame.inventory"
+        :items="storeGame.player.inventory"
         :sell-item="storeGame.sellItem"
       />
     </div>

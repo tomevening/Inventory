@@ -1,8 +1,14 @@
 import { EAttribute } from '@/enums';
 import { defineStore } from 'pinia';
 
-import { Item, Product, Recipe, Shop } from '@/models';
-import { computed, shallowReactive, shallowReadonly, shallowRef } from 'vue';
+import { Item, Player, Product, Recipe, Shop } from '@/models';
+import {
+  computed,
+  shallowReactive,
+  shallowReadonly,
+  shallowRef,
+  watchEffect,
+} from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
@@ -80,8 +86,23 @@ export const useStoreGame = defineStore('storeGame', () => {
     rDruidSword,
   ]);
 
+  const currentModifiers = computed(() => {
+    const modifiers = [];
+    for (const item of player.inventory) {
+      modifiers.push(...item.attributes);
+    }
+    console.log('Computed triggered');
+    return modifiers;
+  });
+
   const shops = [swordsShop, miscShop, tierOneShop];
-  const inventory = shallowReactive<Product<Item | Recipe>[]>([]);
+  const player = Player.create(
+    shallowReactive<Product<Item | Recipe>[]>([]),
+    currentModifiers,
+  );
+  // const inventory = shallowReactive<Product<Item | Recipe>[]>([]);
+
+  watchEffect(() => console.log(player.attributeModifiers.value));
 
   function buyItem(product: Product<any>) {
     if (product.goldCost > currentGold.value) {
@@ -89,7 +110,7 @@ export const useStoreGame = defineStore('storeGame', () => {
       return;
     }
 
-    if (inventory.length === maxInventorySize) {
+    if (player.inventory.length === maxInventorySize) {
       console.log("Can't carry more items");
       return;
     }
@@ -99,16 +120,17 @@ export const useStoreGame = defineStore('storeGame', () => {
   }
 
   function addItem(product: Product<any>) {
-    inventory.push(product.clone());
+    player.inventory.push(product.clone());
     checkRecipes();
-    // refreshAttributes();
+    // console.log(player.attributeModifiers.value);
+    // console.log(product);
   }
 
   function checkRecipes() {
-    const recipies = inventory.filter(
+    const recipies = player.inventory.filter(
       (product): product is Recipe => product instanceof Recipe,
     );
-    const productNames = inventory.map(product => product.name);
+    const productNames = player.inventory.map(product => product.name);
     recipies.forEach(recipe => {
       console.log('Recipe found');
       tryAssemblingItem(recipe, productNames);
@@ -135,17 +157,17 @@ export const useStoreGame = defineStore('storeGame', () => {
 
   function removeItem(product: Product<any>) {
     console.log(product);
-    const itemIndex = inventory.indexOf(product);
+    const itemIndex = player.inventory.indexOf(product);
     if (itemIndex === -1) {
       console.log('Item not found');
       return;
     }
-    inventory.splice(itemIndex, 1);
+    player.inventory.splice(itemIndex, 1);
     // refreshAttributes();
   }
 
   function removeItemByName(productName: string) {
-    const item = inventory.find(product => product.name === productName);
+    const item = player.inventory.find(product => product.name === productName);
     if (!item) return;
     removeItem(item);
   }
@@ -153,14 +175,6 @@ export const useStoreGame = defineStore('storeGame', () => {
   function selectShop(shopID: number) {
     selectedShopId.value = shopID;
   }
-
-  const currentModifiers = computed(() => {
-    const modifiers = [];
-    for (const item of inventory) {
-      modifiers.push(...item.attributes);
-    }
-    return modifiers;
-  });
 
   // const currentModifiers = computed(()=>{
   //   const mofidiers = new Array<AttributeModifier>();
@@ -197,9 +211,12 @@ export const useStoreGame = defineStore('storeGame', () => {
   //   // }
   // }
 
+  console.log('123');
+
   return shallowReadonly({
     shops,
-    inventory,
+    // inventory,
+    player,
     buyItem,
     sellItem,
     selectedShopId,

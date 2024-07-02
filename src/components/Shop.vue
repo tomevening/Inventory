@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { Item as ItemClass } from '@/models';
+  import { Product } from '@/models';
   import Item from './Item.vue';
 
   defineProps<{
-    items: ItemClass[];
-    buyItem: (item: ItemClass) => void;
+    items: Product<any>[];
+    buyItem: (item: Product<any>) => void;
   }>();
 </script>
 
