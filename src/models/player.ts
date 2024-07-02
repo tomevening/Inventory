@@ -1,18 +1,28 @@
 import { AttributeModifier } from '@/types';
-import { ComputedRef, ShallowReactive, shallowReactive } from 'vue';
+import { shallowReactive, watch } from 'vue';
 import { Item, Product, Recipe } from '.';
 
 export class Player {
-  private constructor(
-    public readonly inventory: ShallowReactive<Product<Item | Recipe>[]>,
-    public readonly attributeModifiers: ComputedRef<AttributeModifier[]>,
-  ) {}
+  public readonly inventory;
+  public readonly currentModifiers;
 
-  public static create(
-    inventory: ShallowReactive<Product<Item | Recipe>[]>,
-    attributeModifiers: ComputedRef<AttributeModifier[]>,
-  ) {
-    const instance = new Player(inventory, attributeModifiers);
+  private constructor() {
+    this.inventory = shallowReactive<Product<Item | Recipe>[]>([]);
+    this.currentModifiers = shallowReactive<AttributeModifier[]>([]);
+
+    watch(this.inventory, () => {
+      this.currentModifiers.length = 0;
+
+      this.inventory.forEach(item => {
+        item.attributes.forEach(attribute => {
+          this.currentModifiers.push(attribute);
+        });
+      });
+    });
+  }
+
+  public static create() {
+    const instance = new Player();
     return shallowReactive(instance);
   }
 }

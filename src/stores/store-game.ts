@@ -2,13 +2,7 @@ import { EAttribute } from '@/enums';
 import { defineStore } from 'pinia';
 
 import { Item, Player, Product, Recipe, Shop } from '@/models';
-import {
-  computed,
-  shallowReactive,
-  shallowReadonly,
-  shallowRef,
-  watchEffect,
-} from 'vue';
+import { shallowReadonly, shallowRef, watchEffect } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
@@ -86,23 +80,10 @@ export const useStoreGame = defineStore('storeGame', () => {
     rDruidSword,
   ]);
 
-  const currentModifiers = computed(() => {
-    const modifiers = [];
-    for (const item of player.inventory) {
-      modifiers.push(...item.attributes);
-    }
-    console.log('Computed triggered');
-    return modifiers;
-  });
-
   const shops = [swordsShop, miscShop, tierOneShop];
-  const player = Player.create(
-    shallowReactive<Product<Item | Recipe>[]>([]),
-    currentModifiers,
-  );
-  // const inventory = shallowReactive<Product<Item | Recipe>[]>([]);
+  const player = Player.create();
 
-  watchEffect(() => console.log(player.attributeModifiers.value));
+  watchEffect(() => console.log(player.currentModifiers));
 
   function buyItem(product: Product<any>) {
     if (product.goldCost > currentGold.value) {
@@ -211,11 +192,8 @@ export const useStoreGame = defineStore('storeGame', () => {
   //   // }
   // }
 
-  console.log('123');
-
   return shallowReadonly({
     shops,
-    // inventory,
     player,
     buyItem,
     sellItem,

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { useStoreAttributes, useStoreGame } from '@/stores';
   import { computed } from 'vue';
+  import DebugButton from './DebugButton.vue';
   import Inventory from './Inventory.vue';
   import PlayerStats from './PlayerStats.vue';
   import Shop from './Shop.vue';
@@ -60,6 +61,7 @@
     :crit-dps="storeAttributes.CritDPS"
     class="player-stats"
   />
+  <DebugButton></DebugButton>
 </template>
 
 <style scoped lang="scss">

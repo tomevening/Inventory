@@ -6,7 +6,7 @@ export abstract class Product<T extends Product<T>> {
   public readonly goldCost: number;
   public icon: ProductIcon;
   public readonly id: string;
-  public readonly attributes: AttributeModifier[];
+  public attributes: AttributeModifier[];
 
   constructor(
     name: string,
@@ -17,10 +17,7 @@ export abstract class Product<T extends Product<T>> {
     this.goldCost = goldCost;
     this.icon = this.setIcon();
     this.id = newID();
-    if (!attributes) this.attributes = [];
-    else this.attributes = attributes;
-
-    // console.log(`Item ${this.name} created`);
+    attributes ? (this.attributes = attributes) : (this.attributes = []);
   }
 
   abstract setIcon(): ProductIcon;
