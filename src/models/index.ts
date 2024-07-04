@@ -1,4 +1,5 @@
 export * from './attribute';
+export * from './attribute-modifier';
 export * from './item';
 export * from './player';
 export * from './product';

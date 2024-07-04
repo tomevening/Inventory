@@ -1,5 +1,6 @@
 import { ProductIcon } from '@/models/product-icon';
-import { AttributeModifier } from '@/types';
+// import { AttributeModifier } from '@/types';
+import { AttributeModifier } from '@/models';
 import { newID } from '@/utils';
 export abstract class Product<T extends Product<T>> {
   public readonly name: string;

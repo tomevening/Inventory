@@ -1,8 +1,9 @@
-import { EAttribute } from '@/enums';
+import { EAttribute, EModifierType } from '@/enums';
+import { AttributeModifier } from '@/models';
 import { defineStore } from 'pinia';
 
 import { Item, Player, Product, Recipe, Shop } from '@/models';
-import { shallowReadonly, shallowRef, watchEffect } from 'vue';
+import { shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
@@ -12,7 +13,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   const iSwordAnc = new Item('Ancient Sword', 200);
   const iSwordBlack = new Item('Black Sword', 125);
   const iSwordNoble = new Item('Noble Sword', 150, [
-    { attribute: EAttribute.STRENGTH, type: 'increase', value: 10 },
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 10),
   ]);
   const iSwordEpic = new Item('Epic Sword', 500);
   const iSwordFire = new Item('Fire Sword', 400);
@@ -83,7 +84,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   const shops = [swordsShop, miscShop, tierOneShop];
   const player = Player.create();
 
-  watchEffect(() => console.log(player.currentModifiers));
+  // watchEffect(() => console.log(player.currentModifiers));
 
   function buyItem(product: Product<any>) {
     if (product.goldCost > currentGold.value) {

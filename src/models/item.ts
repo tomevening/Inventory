@@ -1,6 +1,7 @@
 import { Product } from '@/models/product';
 import { ProductIcon } from '@/models/product-icon';
-import { AttributeModifier } from '@/types';
+// import { AttributeModifier } from '@/types';
+import { AttributeModifier } from '@/models';
 
 export class Item extends Product<Item> {
   constructor(

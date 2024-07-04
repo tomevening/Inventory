@@ -1,6 +1,6 @@
-import { AttributeModifier } from '@/types';
+// import { AttributeModifier } from '@/types';
 import { shallowReactive } from 'vue';
-import { Item, Product, Recipe } from '.';
+import { AttributeModifier, Item, Product, Recipe } from '.';
 
 export class Player {
   public readonly inventory = shallowReactive<Product<Item | Recipe>[]>([]);
