@@ -1,28 +1,43 @@
 import { AttributeModifier } from '@/types';
-import { shallowReactive, watch } from 'vue';
+import { shallowReactive } from 'vue';
 import { Item, Product, Recipe } from '.';
 
 export class Player {
-  public readonly inventory;
-  public readonly currentModifiers;
+  public readonly inventory = shallowReactive<Product<Item | Recipe>[]>([]);
 
-  private constructor() {
-    this.inventory = shallowReactive<Product<Item | Recipe>[]>([]);
-    this.currentModifiers = shallowReactive<AttributeModifier[]>([]);
+  private constructor() {}
 
-    watch(this.inventory, () => {
-      this.currentModifiers.length = 0;
-
-      this.inventory.forEach(item => {
-        item.attributes.forEach(attribute => {
-          this.currentModifiers.push(attribute);
-        });
-      });
-    });
+  public get currentModifiers() {
+    const modifiers: AttributeModifier[] = [];
+    for (const item of this.inventory) {
+      modifiers.push(...item.attributes);
+    }
+    return shallowReactive(modifiers);
   }
 
   public static create() {
-    const instance = new Player();
-    return shallowReactive(instance);
+    return shallowReactive(new Player());
   }
 }
+
+// export class Player {
+//   public readonly inventory;
+//   public readonly currentModifiers;
+
+//   private constructor() {
+//     this.inventory = shallowReactive<Product<Item | Recipe>[]>([]);
+
+//     this.currentModifiers = computed(() => {
+//       const modifiers = shallowReactive<AttributeModifier[]>([]);
+//       for (const item of this.inventory) {
+//         modifiers.push(...item.attributes);
+//       }
+//       return modifiers;
+//     });
+//   }
+
+//   public static create() {
+//     const instance = new Player();
+//     return shallowReactive(instance);
+//   }
+// }
