@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useStoreAttributes, useStoreGame } from '@/stores';
+  import { useStoreGame } from '@/stores';
   import { computed } from 'vue';
   import DebugButton from './DebugButton.vue';
   import Inventory from './Inventory.vue';
@@ -7,7 +7,7 @@
   import Shop from './Shop.vue';
 
   const storeGame = useStoreGame();
-  const storeAttributes = useStoreAttributes();
+  // const storeAttributes = useStoreAttributes();
 
   const shopSelected = computed(() => {
     return storeGame.shops[storeGame.selectedShopId];
@@ -56,9 +56,7 @@
     </div>
   </div>
   <PlayerStats
-    :attributes="storeAttributes.attributes"
-    :dps="storeAttributes.DPS"
-    :crit-dps="storeAttributes.CritDPS"
+    :player="storeGame.player"
     class="player-stats"
   />
   <DebugButton></DebugButton>

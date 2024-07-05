@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import { EAttribute } from '@/enums';
-  import { Attribute } from '@/models';
+  import { Player } from '@/models';
 
-  const props = defineProps<{
-    attributes: Map<EAttribute, Attribute>;
-    dps: number;
-    critDps: number;
+  defineProps<{
+    player: Player;
+    // attributes: Map<EAttribute, Attribute>;
+    // dps: number;
+    // critDps: number;
   }>();
 
-  console.log(props.attributes.get(EAttribute.STRENGTH)?.result);
+  // console.log(props.attributes.get(EAttribute.STRENGTH)?.result);
 </script>
 
 <template>
@@ -22,38 +22,30 @@
       </div>
     </div> -->
 
-    <div>
-      Strength: {{ attributes.get(EAttribute.STRENGTH)?.result?.toFixed(1) }}
-    </div>
-    <div>
-      Agility: {{ attributes.get(EAttribute.AGILITY)?.result?.toFixed(1) }}
-    </div>
+    <div>Strength: {{ player.strength.result?.toFixed(1) }}</div>
+    <div>Agility: {{ player.agility.result?.toFixed(1) }}</div>
     <div>
       Intelligence:
-      {{ attributes.get(EAttribute.INTELLIGENCE)?.result?.toFixed(1) }}
+      {{ player.intelligence.result?.toFixed(1) }}
     </div>
     <div>
       Attack speed:
-      {{ attributes.get(EAttribute.ATTACKSPEED)?.result?.toFixed(1) }}
+      {{ player.attackSpeed.result?.toFixed(1) }}
     </div>
     <div>
       Critical chance:
-      {{ attributes.get(EAttribute.CRITCHANCE)?.result?.toFixed(1) }}
+      {{ player.critChance.result?.toFixed(1) }}
     </div>
     <div>
       Critical damage:
-      {{ attributes.get(EAttribute.CRITDMG)?.result?.toFixed(1) }}
+      {{ player.critDamage.result?.toFixed(1) }}
     </div>
-    <div>Armor: {{ attributes.get(EAttribute.ARMOR)?.result?.toFixed(1) }}</div>
-    <div>Damage: {{ attributes.get(EAttribute.DMG)?.result?.toFixed(1) }}</div>
-    <div>
-      Health points: {{ attributes.get(EAttribute.HEALTH)?.result?.toFixed(1) }}
-    </div>
-    <div>
-      Mana points: {{ attributes.get(EAttribute.MANA)?.result?.toFixed(1) }}
-    </div>
-    <div>DPS: {{ dps?.toFixed(1) }}</div>
-    <div>DPS with crit: {{ critDps?.toFixed(1) }}</div>
+    <div>Armor: {{ player.armor.result?.toFixed(1) }}</div>
+    <div>Damage: {{ player.damage.result?.toFixed(1) }}</div>
+    <div>Health points: {{ player.health.result?.toFixed(1) }}</div>
+    <div>Mana points: {{ player.mana.result?.toFixed(1) }}</div>
+    <div>DPS: {{ player.DPS.value.toFixed(1) }}</div>
+    <div>DPS with crit: {{ player.CritDPS.value.toFixed(1) }}</div>
   </div>
 </template>
 
