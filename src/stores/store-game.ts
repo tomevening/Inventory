@@ -3,7 +3,7 @@ import { AttributeModifier } from '@/models';
 import { defineStore } from 'pinia';
 
 import { Item, Player, Product, Recipe, Shop } from '@/models';
-import { shallowReadonly, shallowRef } from 'vue';
+import { shallowReadonly, shallowRef, watch } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
@@ -16,9 +16,14 @@ export const useStoreGame = defineStore('storeGame', () => {
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 10),
   ]);
   const iSwordEpic = new Item('Epic Sword', 500);
-  const iSwordFire = new Item('Fire Sword', 400);
+  const iSwordFire = new Item('Fire Sword', 400, [
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.MULTIPLIER, 2),
+  ]);
   const iSwordFus = new Item('Fusion Sword', 150);
-  const iSwordIce = new Item('Ice Sword', 240);
+  const iSwordIce = new Item('Ice Sword', 240, [
+    new AttributeModifier(EAttribute.ARMOR, EModifierType.INCREASE, 5),
+    new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 5),
+  ]);
   const iSwordSteel = new Item('Steel Sword', 70);
   const iSwordStone = new Item('Stone Sword', 40);
   const iSwordCopper = new Item('Copper Sword', 50);
@@ -157,6 +162,13 @@ export const useStoreGame = defineStore('storeGame', () => {
   function selectShop(shopID: number) {
     selectedShopId.value = shopID;
   }
+
+  // Updating player stats whenever inventory changes:
+  watch(player.inventory, () => {
+    console.log(player.currentModifiers);
+
+    player.applyStats();
+  });
 
   // const currentModifiers = computed(()=>{
   //   const mofidiers = new Array<AttributeModifier>();

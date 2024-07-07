@@ -2,7 +2,7 @@
 import { ComputedRef, shallowReactive } from 'vue';
 import { AttributeModifier, Item, Product, Recipe } from '.';
 
-import { EAttribute } from '@/enums';
+import { EAttribute, EModifierType } from '@/enums';
 import { Attribute } from '@/models';
 import { computed, watchEffect } from 'vue';
 
@@ -20,55 +20,59 @@ export class Player {
   public readonly DPS: ComputedRef<number>;
   public readonly CritDPS: ComputedRef<number>;
   public readonly attackCooldown: ComputedRef<number>;
+  public readonly attributes: Map<EAttribute, Attribute>;
 
   public readonly inventory = shallowReactive<Product<Item | Recipe>[]>([]);
 
   private constructor() {
-    const attributes = new Map<EAttribute, Attribute>();
+    this.attributes = new Map<EAttribute, Attribute>();
 
-    this.strength = Attribute.create(11) as Attribute;
-    this.strength.percentageIncreases.push(26.001);
-    this.strength.percentageIncreases.push(25);
-    attributes.set(EAttribute.STRENGTH, this.strength);
+    this.strength = Attribute.create(10, this.currentModifiers) as Attribute;
+    // this.strength.percentageIncreases.push(26.001);
+    // this.strength.percentageIncreases.push(25);
+    this.attributes.set(EAttribute.STRENGTH, this.strength);
 
-    this.health = Attribute.create(100) as Attribute;
+    this.health = Attribute.create(100, this.currentModifiers) as Attribute;
     watchEffect(() =>
       this.health.setBaseAttributeIncrement(this.strength.result * 6),
     );
-    attributes.set(EAttribute.HEALTH, this.health);
+    this.attributes.set(EAttribute.HEALTH, this.health);
 
-    this.agility = Attribute.create(10) as Attribute;
-    attributes.set(EAttribute.AGILITY, this.agility);
+    this.agility = Attribute.create(10, this.currentModifiers) as Attribute;
+    this.attributes.set(EAttribute.AGILITY, this.agility);
 
-    this.armor = Attribute.create(5) as Attribute;
+    this.armor = Attribute.create(5, this.currentModifiers) as Attribute;
     watchEffect(() =>
       this.armor.setBaseAttributeIncrement(this.agility.result * 0.2),
     );
-    attributes.set(EAttribute.ARMOR, this.armor);
+    this.attributes.set(EAttribute.ARMOR, this.armor);
 
-    this.attackSpeed = Attribute.create(2) as Attribute;
+    this.attackSpeed = Attribute.create(2, this.currentModifiers) as Attribute;
     watchEffect(() =>
       this.attackSpeed.setBaseAttributeIncrement(this.agility.result * 0.2),
     );
-    attributes.set(EAttribute.ATTACKSPEED, this.attackSpeed);
+    this.attributes.set(EAttribute.ATTACKSPEED, this.attackSpeed);
     this.attackCooldown = computed(() => 1 / this.attackSpeed.result);
 
-    this.intelligence = Attribute.create(10) as Attribute;
-    attributes.set(EAttribute.INTELLIGENCE, this.intelligence);
+    this.intelligence = Attribute.create(
+      10,
+      this.currentModifiers,
+    ) as Attribute;
+    this.attributes.set(EAttribute.INTELLIGENCE, this.intelligence);
 
-    this.mana = Attribute.create(100) as Attribute;
+    this.mana = Attribute.create(100, this.currentModifiers) as Attribute;
     watchEffect(() =>
       this.mana.setBaseAttributeIncrement(this.intelligence.result * 6),
     );
-    attributes.set(EAttribute.MANA, this.mana);
+    this.attributes.set(EAttribute.MANA, this.mana);
 
-    this.critChance = Attribute.create(10) as Attribute;
-    attributes.set(EAttribute.CRITCHANCE, this.critChance);
+    this.critChance = Attribute.create(10, this.currentModifiers) as Attribute;
+    this.attributes.set(EAttribute.CRITCHANCE, this.critChance);
 
-    this.critDamage = Attribute.create(2) as Attribute;
-    attributes.set(EAttribute.CRITDMG, this.critDamage);
+    this.critDamage = Attribute.create(2, this.currentModifiers) as Attribute;
+    this.attributes.set(EAttribute.CRITDMG, this.critDamage);
 
-    this.damage = Attribute.create(10) as Attribute;
+    this.damage = Attribute.create(10, this.currentModifiers) as Attribute;
     watchEffect(() =>
       this.damage.setBaseAttributeIncrement(
         Math.max(
@@ -78,7 +82,7 @@ export class Player {
         ),
       ),
     );
-    attributes.set(EAttribute.DMG, this.damage);
+    this.attributes.set(EAttribute.DMG, this.damage);
 
     this.DPS = computed(
       () => this.damage.result * (1 / this.attackCooldown.value),
@@ -103,6 +107,36 @@ export class Player {
 
   public static create() {
     return shallowReactive(new Player());
+  }
+
+  public applyStats() {
+    this.clearStats();
+    // const increases: number[] = [];
+    this.currentModifiers.forEach(modifier => {
+      // const attributeName = modifier.attribute;
+      const attributeToChange = this.attributes.get(modifier.attribute);
+      switch (modifier.modifierType) {
+        case EModifierType.INCREASE:
+          attributeToChange?.numberIncreases.push(modifier.value);
+          break;
+
+        case EModifierType.PERCENTAGE:
+          attributeToChange?.percentageIncreases.push(modifier.value);
+          break;
+
+        case EModifierType.MULTIPLIER:
+          attributeToChange?.multipliers.push(modifier.value);
+          break;
+      }
+    });
+  }
+
+  private clearStats() {
+    this.attributes.forEach(attribute => {
+      attribute.numberIncreases.length = 0;
+      attribute.percentageIncreases.length = 0;
+      attribute.multipliers.length = 0;
+    });
   }
 }
 

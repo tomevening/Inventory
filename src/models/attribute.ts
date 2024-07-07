@@ -1,4 +1,5 @@
-import { reactive } from 'vue';
+import { ShallowReactive, reactive } from 'vue';
+import { AttributeModifier } from '.';
 
 export class Attribute {
   public baseStat: number;
@@ -6,13 +7,37 @@ export class Attribute {
   public numberIncreases: number[];
   public percentageIncreases: number[];
   public multipliers: number[];
+  public readonly modifiers: ShallowReactive<AttributeModifier[]>;
 
-  private constructor(baseStat: number) {
+  private constructor(
+    baseStat: number,
+    modifiers: ShallowReactive<AttributeModifier[]>,
+  ) {
     this.baseStat = baseStat;
     this.originalBaseStat = baseStat;
     this.numberIncreases = [];
     this.percentageIncreases = [];
     this.multipliers = [];
+    this.modifiers = modifiers;
+
+    // watch(
+    //   modifiers,
+    //   () => {
+    //     // TODO: simplified temporary code
+    //     console.log('1');
+    //     const increases: number[] = [];
+    //     modifiers.forEach(modifier => {
+    //       if (modifier.attribute === EAttribute.STRENGTH) {
+    //         if (modifier.modifierType === EModifierType.INCREASE) {
+    //           increases.push(modifier.value);
+    //           console.log('2');
+    //         }
+    //       }
+    //     });
+    //     this.numberIncreases = increases;
+    //   },
+    //   { deep: true, immediate: true },
+    // );
   }
 
   public get result(): number {
@@ -26,8 +51,11 @@ export class Attribute {
     return result;
   }
 
-  public static create(baseStat: number) {
-    const instance = new Attribute(baseStat);
+  public static create(
+    baseStat: number,
+    modifiers: ShallowReactive<AttributeModifier[]>,
+  ) {
+    const instance = new Attribute(baseStat, modifiers);
     return reactive(instance);
   }
 
