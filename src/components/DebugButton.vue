@@ -2,8 +2,6 @@
   import { useStoreGame } from '@/stores';
   const store = useStoreGame();
 
-  // watchEffect(() => console.log(store.player.currentModifiers));
-
   function debug() {
     console.log(store.player.currentModifiers);
   }

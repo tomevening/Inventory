@@ -1,4 +1,3 @@
-// import { AttributeModifier } from '@/types';
 import { ComputedRef, shallowReactive } from 'vue';
 import { AttributeModifier, Item, Product, Recipe } from '.';
 
@@ -28,8 +27,6 @@ export class Player {
     this.attributes = new Map<EAttribute, Attribute>();
 
     this.strength = Attribute.create(10, this.currentModifiers) as Attribute;
-    // this.strength.percentageIncreases.push(26.001);
-    // this.strength.percentageIncreases.push(25);
     this.attributes.set(EAttribute.STRENGTH, this.strength);
 
     this.health = Attribute.create(100, this.currentModifiers) as Attribute;
@@ -102,18 +99,9 @@ export class Player {
     for (const item of this.inventory) {
       modifiers.push(...item.attributes);
     }
-    return shallowReactive(modifiers);
-  }
 
-  public static create() {
-    return shallowReactive(new Player());
-  }
-
-  public applyStats() {
     this.clearStats();
-    // const increases: number[] = [];
-    this.currentModifiers.forEach(modifier => {
-      // const attributeName = modifier.attribute;
+    modifiers.forEach(modifier => {
       const attributeToChange = this.attributes.get(modifier.attribute);
       switch (modifier.modifierType) {
         case EModifierType.INCREASE:
@@ -129,6 +117,9 @@ export class Player {
           break;
       }
     });
+    console.log(modifiers);
+
+    return shallowReactive(modifiers);
   }
 
   private clearStats() {
@@ -138,26 +129,8 @@ export class Player {
       attribute.multipliers.length = 0;
     });
   }
+
+  public static create() {
+    return shallowReactive(new Player());
+  }
 }
-
-// export class Player {
-//   public readonly inventory;
-//   public readonly currentModifiers;
-
-//   private constructor() {
-//     this.inventory = shallowReactive<Product<Item | Recipe>[]>([]);
-
-//     this.currentModifiers = computed(() => {
-//       const modifiers = shallowReactive<AttributeModifier[]>([]);
-//       for (const item of this.inventory) {
-//         modifiers.push(...item.attributes);
-//       }
-//       return modifiers;
-//     });
-//   }
-
-//   public static create() {
-//     const instance = new Player();
-//     return shallowReactive(instance);
-//   }
-// }

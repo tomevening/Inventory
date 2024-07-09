@@ -3,7 +3,7 @@ import { AttributeModifier } from '@/models';
 import { defineStore } from 'pinia';
 
 import { Item, Player, Product, Recipe, Shop } from '@/models';
-import { shallowReadonly, shallowRef, watch } from 'vue';
+import { shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
@@ -89,8 +89,6 @@ export const useStoreGame = defineStore('storeGame', () => {
   const shops = [swordsShop, miscShop, tierOneShop];
   const player = Player.create();
 
-  // watchEffect(() => console.log(player.currentModifiers));
-
   function buyItem(product: Product<any>) {
     if (product.goldCost > currentGold.value) {
       console.log('Not enough gold to buy!');
@@ -109,8 +107,6 @@ export const useStoreGame = defineStore('storeGame', () => {
   function addItem(product: Product<any>) {
     player.inventory.push(product.clone());
     checkRecipes();
-    // console.log(player.attributeModifiers.value);
-    // console.log(product);
   }
 
   function checkRecipes() {
@@ -143,14 +139,12 @@ export const useStoreGame = defineStore('storeGame', () => {
   }
 
   function removeItem(product: Product<any>) {
-    console.log(product);
     const itemIndex = player.inventory.indexOf(product);
     if (itemIndex === -1) {
       console.log('Item not found');
       return;
     }
     player.inventory.splice(itemIndex, 1);
-    // refreshAttributes();
   }
 
   function removeItemByName(productName: string) {
@@ -162,48 +156,6 @@ export const useStoreGame = defineStore('storeGame', () => {
   function selectShop(shopID: number) {
     selectedShopId.value = shopID;
   }
-
-  // Updating player stats whenever inventory changes:
-  watch(player.inventory, () => {
-    console.log(player.currentModifiers);
-
-    player.applyStats();
-  });
-
-  // const currentModifiers = computed(()=>{
-  //   const mofidiers = new Array<AttributeModifier>();
-  //   inventory.forEach((item)=>{
-  //     item.attributes.forEach((attribute)=>{
-  //       mofidiers.push(attribute)
-
-  //     })
-  //   })
-  //   return mofidiers;
-  // })
-
-  // function refreshAttributes() {
-  //   inventory.forEach(item => applyItemAttributes(item));
-  // }
-
-  // function applyItemAttributes(product: Product<any>) {
-  //   if (product.attributes.length === 0) return;
-  //   product.attributes.forEach(item => applyItemAttribute(item));
-  // }
-
-  // function applyItemAttribute(modifier: AttributeModifier) {
-  //   const attributeName = `${modifier.attribute}`;
-  //   // switch (modifier.type) {
-  //   //   case 'increase':
-  //   //     attributes[attributeName] += modifier.value;
-  //   //     break;
-  //   //   case 'percentage':
-  //   //     attributes[attributeName] *= 1 + modifier.value / 100;
-  //   //     break;
-  //   //   case 'multiplier':
-  //   //     attributes[attributeName] *= modifier.value;
-  //   //     break;
-  //   // }
-  // }
 
   return shallowReadonly({
     shops,

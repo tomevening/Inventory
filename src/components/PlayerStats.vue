@@ -1,27 +1,16 @@
 <script setup lang="ts">
   import { Player } from '@/models';
+  import { watchEffect } from 'vue';
 
-  defineProps<{
+  const props = defineProps<{
     player: Player;
-    // attributes: Map<EAttribute, Attribute>;
-    // dps: number;
-    // critDps: number;
   }>();
 
-  // console.log(props.attributes.get(EAttribute.STRENGTH)?.result);
+  watchEffect(() => console.log(props.player.currentModifiers));
 </script>
 
 <template>
   <div class="stats">
-    <!-- <div>
-      <div
-        v-for="[attributeType, attribute] in attributes"
-        :key="attributeType"
-      >
-        {{ attributeType }}: {{ attribute.result?.toFixed(1) }}
-      </div>
-    </div> -->
-
     <div>Strength: {{ player.strength.result?.toFixed(1) }}</div>
     <div>Agility: {{ player.agility.result?.toFixed(1) }}</div>
     <div>
