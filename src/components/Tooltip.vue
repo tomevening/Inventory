@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { EModifierType } from '@/enums';
-  import { AttributeModifier, Product } from '@/models';
+  import { AttributeModifier, Item, Product, Recipe } from '@/models';
   import { onMounted, onUnmounted, ref, shallowRef } from 'vue';
   defineProps<{
     item: Product<any>;
@@ -24,19 +24,30 @@
 
   const tooltipRef = ref<HTMLElement | null>(null);
 
-  function showAttribute(attribute: AttributeModifier) {
-    let result = '';
-    switch (attribute.modifierType) {
-      case EModifierType.INCREASE:
-        result = `+${attribute.value} ${attribute.attribute}`;
-        break;
-      case EModifierType.PERCENTAGE:
-        result = `+${attribute.value}% ${attribute.attribute}`;
-        break;
-      case EModifierType.MULTIPLIER:
-        result = `x${attribute.value} ${attribute.attribute}`;
-        break;
+  function showAttribute(product: Product<any>) {
+    let attributesToShow: AttributeModifier[] = [];
+
+    if (product instanceof Item) {
+      attributesToShow = product.attributes;
+    } else if (product instanceof Recipe) {
+      attributesToShow = product.result.attributes;
     }
+    let result = '';
+
+    for (let attribute of attributesToShow) {
+      switch (attribute.modifierType) {
+        case EModifierType.INCREASE:
+          result = result + `+${attribute.value} ${attribute.attribute}\n`;
+          break;
+        case EModifierType.PERCENTAGE:
+          result = result + `+${attribute.value}% ${attribute.attribute}\n`;
+          break;
+        case EModifierType.MULTIPLIER:
+          result = result + `x${attribute.value} ${attribute.attribute}\n`;
+          break;
+      }
+    }
+
     return result;
   }
 
@@ -69,12 +80,7 @@
       <div class="font-bold">{{ item.name }}</div>
       <div class="inline-block text-yellow-400">{{ item.goldCost }} Gold</div>
 
-      <div
-        v-for="attribute in item.attributes"
-        :key="item.id"
-      >
-        {{ showAttribute(attribute) }}
-      </div>
+      <pre>{{ showAttribute(item) }}</pre>
     </div>
   </div>
 </template>

@@ -20,8 +20,4 @@ export class Recipe extends Product<Recipe> {
   public clone() {
     return new Recipe(this.parts, this.result, this.goldCost);
   }
-
-  // public clone() {
-  //   return new Recipe(this.parts, this.result, this.goldCost);
-  // }
 }
