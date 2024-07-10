@@ -10,36 +10,97 @@ export const useStoreGame = defineStore('storeGame', () => {
   const maxInventorySize = 6;
   const selectedShopId = shallowRef(0);
 
-  const iSwordAnc = new Item('Ancient Sword', 200);
-  const iSwordBlack = new Item('Black Sword', 125);
+  const iSwordAnc = new Item('Ancient Sword', 200, [
+    new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 20),
+    new AttributeModifier(EAttribute.ARMOR, EModifierType.INCREASE, -5),
+  ]);
+
+  const iSwordBlack = new Item('Black Sword', 125, [
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 25),
+    new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, -10),
+  ]);
+
   const iSwordNoble = new Item('Noble Sword', 150, [
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 10),
   ]);
-  const iSwordEpic = new Item('Epic Sword', 500);
+
+  const iSwordEpic = new Item('Epic Sword', 500, [
+    new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 45),
+    new AttributeModifier(EAttribute.ATTACKSPEED, EModifierType.PERCENTAGE, 35),
+  ]);
+
   const iSwordFire = new Item('Fire Sword', 400, [
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.MULTIPLIER, 2),
   ]);
-  const iSwordFus = new Item('Fusion Sword', 150);
+
+  const iSwordFus = new Item('Fusion Sword', 150, [
+    new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 33),
+  ]);
+
   const iSwordIce = new Item('Ice Sword', 240, [
+    new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 20),
     new AttributeModifier(EAttribute.ARMOR, EModifierType.INCREASE, 5),
+  ]);
+
+  const iSwordSteel = new Item('Steel Sword', 70, [
+    new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 15),
+  ]);
+
+  const iSwordStone = new Item('Stone Sword', 40, [
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 5),
+    new AttributeModifier(EAttribute.HEALTH, EModifierType.INCREASE, 30),
+  ]);
+
+  const iSwordCopper = new Item('Copper Sword', 50, [
+    new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 25),
+    new AttributeModifier(EAttribute.AGILITY, EModifierType.INCREASE, -10),
+  ]);
+
+  const iSwordDruid = new Item('Druid Sword', 420, [
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 30),
+    new AttributeModifier(EAttribute.ARMOR, EModifierType.PERCENTAGE, 25),
+    new AttributeModifier(EAttribute.HEALTH, EModifierType.PERCENTAGE, 25),
+  ]);
+
+  const iSwordLong = new Item('Long Sword', 130, [
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 15),
+    new AttributeModifier(EAttribute.AGILITY, EModifierType.INCREASE, 5),
+  ]);
+
+  const iMiscPandAm = new Item('Panda Amulet', 90, [
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 5),
+    new AttributeModifier(EAttribute.AGILITY, EModifierType.INCREASE, 5),
+    new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, 5),
+  ]);
+  const iMiscBookKnow = new Item('Book of Knowledge', 60, [
+    new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, 5),
+    new AttributeModifier(EAttribute.MANA, EModifierType.PERCENTAGE, 15),
+  ]);
+  const iMiscEmRing = new Item('Emerald Ring', 80, [
+    new AttributeModifier(EAttribute.HEALTH, EModifierType.INCREASE, 60),
+  ]);
+  const iMiscGoldKey = new Item('Golden Key', 50, [
+    new AttributeModifier(EAttribute.CRITCHANCE, EModifierType.INCREASE, 20),
+  ]);
+  const iMiscMagHat = new Item('Magic Hat', 40, [
+    new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, 6),
+  ]);
+  const iMiscApple = new Item('Red Apple', 20, [
+    new AttributeModifier(EAttribute.HEALTH, EModifierType.PERCENTAGE, 10),
+  ]);
+  const iMiscRedSph = new Item('Red Sphere', 65, [
+    new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, 5),
     new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 5),
   ]);
-  const iSwordSteel = new Item('Steel Sword', 70);
-  const iSwordStone = new Item('Stone Sword', 40);
-  const iSwordCopper = new Item('Copper Sword', 50);
-  const iSwordDruid = new Item('Druid Sword', 420);
-  const iSwordLong = new Item('Long Sword', 130);
-
-  const iMiscPandAm = new Item('Panda Amulet', 90);
-  const iMiscBookKnow = new Item('Book of Knowledge', 60);
-  const iMiscEmRing = new Item('Emerald Ring', 80);
-  const iMiscGoldKey = new Item('Golden Key', 50);
-  const iMiscMagHat = new Item('Magic Hat', 40);
-  const iMiscApple = new Item('Red Apple', 20);
-  const iMiscRedSph = new Item('Red Sphere', 65);
-  const iMiscSapRing = new Item('Sapphire Ring', 100);
-  const iMiscRune = new Item('Rune', 50);
-  const iMiscFireCr = new Item('Fire Crystall', 50);
+  const iMiscSapRing = new Item('Sapphire Ring', 100, [
+    new AttributeModifier(EAttribute.MANA, EModifierType.INCREASE, 60),
+  ]);
+  const iMiscRune = new Item('Rune', 50, [
+    new AttributeModifier(EAttribute.CRITDMG, EModifierType.INCREASE, 0.3),
+  ]);
+  const iMiscFireCr = new Item('Fire Crystall', 50, [
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.PERCENTAGE, 10),
+  ]);
 
   const swordsShop = new Shop('Sword Shop', [
     iSwordStone,

@@ -24,30 +24,30 @@
 
   const tooltipRef = ref<HTMLElement | null>(null);
 
-  function showAttribute(product: Product<any>) {
-    let attributesToShow: AttributeModifier[] = [];
-
+  function getAttributeModifiers(product: Product<any>) {
     if (product instanceof Item) {
-      attributesToShow = product.attributes;
+      return product.attributes;
     } else if (product instanceof Recipe) {
-      attributesToShow = product.result.attributes;
+      return product.result.attributes;
     }
+  }
+
+  function showAttribute(attribute: AttributeModifier) {
     let result = '';
 
-    for (let attribute of attributesToShow) {
-      switch (attribute.modifierType) {
-        case EModifierType.INCREASE:
-          result = result + `+${attribute.value} ${attribute.attribute}\n`;
-          break;
-        case EModifierType.PERCENTAGE:
-          result = result + `+${attribute.value}% ${attribute.attribute}\n`;
-          break;
-        case EModifierType.MULTIPLIER:
-          result = result + `x${attribute.value} ${attribute.attribute}\n`;
-          break;
-      }
-    }
+    const sign = attribute.value > 0 ? '+' : '';
 
+    switch (attribute.modifierType) {
+      case EModifierType.INCREASE:
+        result = `${sign}${attribute.value} ${attribute.attribute}`;
+        break;
+      case EModifierType.PERCENTAGE:
+        result = `${sign}${attribute.value}% ${attribute.attribute}`;
+        break;
+      case EModifierType.MULTIPLIER:
+        result = `x${attribute.value} ${attribute.attribute}`;
+        break;
+    }
     return result;
   }
 
@@ -80,7 +80,12 @@
       <div class="font-bold">{{ item.name }}</div>
       <div class="inline-block text-yellow-400">{{ item.goldCost }} Gold</div>
 
-      <pre>{{ showAttribute(item) }}</pre>
+      <div
+        v-for="attribute in getAttributeModifiers(item)"
+        :key="item.id"
+      >
+        {{ showAttribute(attribute) }}
+      </div>
     </div>
   </div>
 </template>
