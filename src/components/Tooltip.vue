@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Product } from '@/models';
+  import { EModifierType } from '@/enums';
+  import { AttributeModifier, Product } from '@/models';
   import { onMounted, onUnmounted, ref, shallowRef } from 'vue';
   defineProps<{
     item: Product<any>;
@@ -22,6 +23,22 @@
   }
 
   const tooltipRef = ref<HTMLElement | null>(null);
+
+  function showAttribute(attribute: AttributeModifier) {
+    let result = '';
+    switch (attribute.modifierType) {
+      case EModifierType.INCREASE:
+        result = `+${attribute.value} ${attribute.attribute}`;
+        break;
+      case EModifierType.PERCENTAGE:
+        result = `+${attribute.value}% ${attribute.attribute}`;
+        break;
+      case EModifierType.MULTIPLIER:
+        result = `x${attribute.value} ${attribute.attribute}`;
+        break;
+    }
+    return result;
+  }
 
   onMounted(() => {
     const el = tooltipRef.value;
@@ -46,12 +63,18 @@
     <slot></slot>
     <div
       v-if="isTooltipVisible"
-      class="absolute z-10 p-2 mt-2 text-sm text-white bg-black rounded shadow-lg whitespace-nowrap"
+      class="absolute z-10 p-1.5 text-sm text-white bg-black rounded shadow-lg whitespace-nowrap"
       :style="{ left: `${tooltipPosition.x}px`, top: `${tooltipPosition.y}px` }"
     >
-      {{ item.name }}
-      <br />
-      {{ item.goldCost }} Gold
+      <div class="font-bold">{{ item.name }}</div>
+      <div class="inline-block text-yellow-400">{{ item.goldCost }} Gold</div>
+
+      <div
+        v-for="attribute in item.attributes"
+        :key="item.id"
+      >
+        {{ showAttribute(attribute) }}
+      </div>
     </div>
   </div>
 </template>
