@@ -117,7 +117,7 @@ export class Player {
           break;
       }
     });
-    console.log(modifiers);
+    // console.log(modifiers);
 
     return shallowReactive(modifiers);
   }

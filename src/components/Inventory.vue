@@ -2,10 +2,15 @@
   import { Product } from '@/models';
   import Item from './Item.vue';
 
-  defineProps<{
+  const props = defineProps<{
     items: Product<any>[];
     sellItem: (item: Product<any>) => void;
   }>();
+
+  // TODO: Finish or delete
+  let inventory: (Product<any> | null)[] = [];
+  inventory.push(...props.items);
+  inventory.length = 6;
 </script>
 
 <template>

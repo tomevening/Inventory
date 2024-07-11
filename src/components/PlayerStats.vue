@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { EAttribute } from '@/enums';
   import { Player } from '@/models';
   import { watchEffect } from 'vue';
 
@@ -7,32 +8,27 @@
   }>();
 
   watchEffect(() => console.log(props.player.currentModifiers));
+
+  function assignColor(attributeName: EAttribute) {
+    const attribute = props.player.attributes.get(attributeName);
+    if (!attribute) return;
+
+    return attribute.baseStat < attribute.result
+      ? 'color: #1EB300'
+      : attribute.baseStat > attribute.result
+      ? 'color: red'
+      : 'color: black';
+  }
 </script>
 
 <template>
   <div class="stats">
-    <div>Strength: {{ player.strength.result?.toFixed(1) }}</div>
-    <div>Agility: {{ player.agility.result?.toFixed(1) }}</div>
-    <div>
-      Intelligence:
-      {{ player.intelligence.result?.toFixed(1) }}
+    <div v-for="[attributeKey, attributeValue] in props.player.attributes">
+      <div :style="assignColor(attributeKey)">
+        {{ attributeKey }} {{ attributeValue.result }}
+      </div>
     </div>
-    <div>
-      Attack speed:
-      {{ player.attackSpeed.result?.toFixed(1) }}
-    </div>
-    <div>
-      Critical chance:
-      {{ player.critChance.result?.toFixed(1) }}
-    </div>
-    <div>
-      Critical damage:
-      {{ player.critDamage.result?.toFixed(1) }}
-    </div>
-    <div>Armor: {{ player.armor.result?.toFixed(1) }}</div>
-    <div>Damage: {{ player.damage.result?.toFixed(1) }}</div>
-    <div>Health points: {{ player.health.result?.toFixed(1) }}</div>
-    <div>Mana points: {{ player.mana.result?.toFixed(1) }}</div>
+    <br />
     <div>DPS: {{ player.DPS.value.toFixed(1) }}</div>
     <div>DPS with crit: {{ player.CritDPS.value.toFixed(1) }}</div>
   </div>

@@ -24,12 +24,12 @@ export const useStoreGame = defineStore('storeGame', () => {
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 10),
   ]);
 
-  const iSwordEpic = new Item('Epic Sword', 500, [
+  const iSwordEpic = new Item('Epic Sword', 300, [
     new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 45),
     new AttributeModifier(EAttribute.ATTACKSPEED, EModifierType.PERCENTAGE, 35),
   ]);
 
-  const iSwordFire = new Item('Fire Sword', 400, [
+  const iSwordFire = new Item('Fire Sword', 250, [
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.MULTIPLIER, 2),
   ]);
 
@@ -56,7 +56,7 @@ export const useStoreGame = defineStore('storeGame', () => {
     new AttributeModifier(EAttribute.AGILITY, EModifierType.INCREASE, -10),
   ]);
 
-  const iSwordDruid = new Item('Druid Sword', 420, [
+  const iSwordDruid = new Item('Druid Sword', 200, [
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 30),
     new AttributeModifier(EAttribute.ARMOR, EModifierType.PERCENTAGE, 25),
     new AttributeModifier(EAttribute.HEALTH, EModifierType.PERCENTAGE, 25),
