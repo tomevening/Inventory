@@ -2,15 +2,10 @@
   import { Product } from '@/models';
   import Item from './Item.vue';
 
-  const props = defineProps<{
+  defineProps<{
     items: Product<any>[];
     sellItem: (item: Product<any>) => void;
   }>();
-
-  // TODO: Finish or delete
-  let inventory: (Product<any> | null)[] = [];
-  inventory.push(...props.items);
-  inventory.length = 6;
 </script>
 
 <template>
@@ -30,12 +25,11 @@
 <style scoped lang="scss">
   .inventory-grid {
     display: grid;
-    grid-template-columns: 80px 80px;
-    padding: 5px;
-  }
-
-  .inventory-item {
-    padding: 4px;
+    grid-template-columns: 5rem 5rem;
+    padding: 0.45rem;
+    gap: 0.45rem;
+    grid-template-columns: repeat(2, 5rem);
+    grid-template-rows: repeat(3, 5rem);
   }
 
   .inventory {
