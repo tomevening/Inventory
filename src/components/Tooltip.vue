@@ -51,6 +51,11 @@
     return result;
   }
 
+  function showParts(product: Product<any>) {
+    if (!(product instanceof Recipe)) return '';
+    return product.parts.map(part => part.name);
+  }
+
   onMounted(() => {
     const el = tooltipRef.value;
     el?.addEventListener('mouseover', showTooltip);
@@ -85,6 +90,19 @@
         :key="item.id"
       >
         {{ showAttribute(attribute) }}
+      </div>
+
+      <div
+        class="text-blue-700"
+        v-if="showParts(item)"
+      >
+        Parts:
+      </div>
+      <div
+        class="italic"
+        v-for="name in showParts(item)"
+      >
+        {{ name }}
       </div>
     </div>
   </div>
