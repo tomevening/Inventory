@@ -25,7 +25,7 @@
   <div class="stats">
     <div v-for="[attributeKey, attributeValue] in props.player.attributes">
       <div :style="assignColor(attributeKey)">
-        {{ attributeKey }} {{ attributeValue.result }}
+        {{ attributeKey }} {{ attributeValue.result.toFixed(1) }}
       </div>
     </div>
     <br />

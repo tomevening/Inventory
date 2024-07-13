@@ -17,7 +17,8 @@ export const useStoreGame = defineStore('storeGame', () => {
 
   const iSwordBlack = new Item('Black Sword', 125, [
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 25),
-    new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, -10),
+    // new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, -10),
+    new AttributeModifier(EAttribute.HEALTH, EModifierType.INCREASE, -200),
   ]);
 
   const iSwordNoble = new Item('Noble Sword', 150, [
@@ -87,6 +88,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   ]);
   const iMiscApple = new Item('Red Apple', 20, [
     new AttributeModifier(EAttribute.HEALTH, EModifierType.PERCENTAGE, 10),
+    // new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, -30),
   ]);
   const iMiscRedSph = new Item('Red Sphere', 65, [
     new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, 5),

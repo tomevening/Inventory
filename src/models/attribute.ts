@@ -8,10 +8,14 @@ export class Attribute {
   public percentageIncreases: number[];
   public multipliers: number[];
   public readonly modifiers: ShallowReactive<AttributeModifier[]>;
+  public minCap?: number;
+  public maxCap?: number;
 
   private constructor(
     baseStat: number,
     modifiers: ShallowReactive<AttributeModifier[]>,
+    minCap?: number,
+    maxCap?: number,
   ) {
     this.baseStat = baseStat;
     this.originalBaseStat = baseStat;
@@ -19,25 +23,8 @@ export class Attribute {
     this.percentageIncreases = [];
     this.multipliers = [];
     this.modifiers = modifiers;
-
-    // watch(
-    //   modifiers,
-    //   () => {
-    //     // TODO: simplified temporary code
-    //     console.log('1');
-    //     const increases: number[] = [];
-    //     modifiers.forEach(modifier => {
-    //       if (modifier.attribute === EAttribute.STRENGTH) {
-    //         if (modifier.modifierType === EModifierType.INCREASE) {
-    //           increases.push(modifier.value);
-    //           console.log('2');
-    //         }
-    //       }
-    //     });
-    //     this.numberIncreases = increases;
-    //   },
-    //   { deep: true, immediate: true },
-    // );
+    this.minCap = minCap;
+    this.maxCap = maxCap;
   }
 
   public get result(): number {
@@ -46,16 +33,19 @@ export class Attribute {
     result += result * (this.calculatePercentageIncrease() / 100);
     result *= this.calculateMultipliers();
 
-    // result = +result.toFixed(1);
-    // console.log(result);
+    if (this.minCap !== undefined && result < this.minCap) return this.minCap;
+    if (this.maxCap !== undefined && result > this.maxCap) return this.maxCap;
+
     return result;
   }
 
   public static create(
     baseStat: number,
     modifiers: ShallowReactive<AttributeModifier[]>,
+    minCap?: number,
+    maxCap?: number,
   ) {
-    const instance = new Attribute(baseStat, modifiers);
+    const instance = new Attribute(baseStat, modifiers, minCap, maxCap);
     return reactive(instance);
   }
 

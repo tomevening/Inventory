@@ -26,16 +26,16 @@ export class Player {
   private constructor() {
     this.attributes = new Map<EAttribute, Attribute>();
 
-    this.strength = Attribute.create(10, this.currentModifiers) as Attribute;
+    this.strength = Attribute.create(10, this.currentModifiers, 0) as Attribute;
     this.attributes.set(EAttribute.STRENGTH, this.strength);
 
-    this.health = Attribute.create(100, this.currentModifiers) as Attribute;
+    this.health = Attribute.create(100, this.currentModifiers, 1) as Attribute;
     watchEffect(() =>
       this.health.setBaseAttributeIncrement(this.strength.result * 6),
     );
     this.attributes.set(EAttribute.HEALTH, this.health);
 
-    this.agility = Attribute.create(10, this.currentModifiers) as Attribute;
+    this.agility = Attribute.create(10, this.currentModifiers, 0) as Attribute;
     this.attributes.set(EAttribute.AGILITY, this.agility);
 
     this.armor = Attribute.create(5, this.currentModifiers) as Attribute;
@@ -44,7 +44,11 @@ export class Player {
     );
     this.attributes.set(EAttribute.ARMOR, this.armor);
 
-    this.attackSpeed = Attribute.create(2, this.currentModifiers) as Attribute;
+    this.attackSpeed = Attribute.create(
+      1,
+      this.currentModifiers,
+      0.1,
+    ) as Attribute;
     watchEffect(() =>
       this.attackSpeed.setBaseAttributeIncrement(this.agility.result * 0.2),
     );
@@ -54,22 +58,32 @@ export class Player {
     this.intelligence = Attribute.create(
       10,
       this.currentModifiers,
+      0,
     ) as Attribute;
     this.attributes.set(EAttribute.INTELLIGENCE, this.intelligence);
 
-    this.mana = Attribute.create(100, this.currentModifiers) as Attribute;
+    this.mana = Attribute.create(100, this.currentModifiers, 0) as Attribute;
     watchEffect(() =>
       this.mana.setBaseAttributeIncrement(this.intelligence.result * 6),
     );
     this.attributes.set(EAttribute.MANA, this.mana);
 
-    this.critChance = Attribute.create(10, this.currentModifiers) as Attribute;
+    this.critChance = Attribute.create(
+      10,
+      this.currentModifiers,
+      0,
+      100,
+    ) as Attribute;
     this.attributes.set(EAttribute.CRITCHANCE, this.critChance);
 
-    this.critDamage = Attribute.create(2, this.currentModifiers) as Attribute;
+    this.critDamage = Attribute.create(
+      2,
+      this.currentModifiers,
+      1,
+    ) as Attribute;
     this.attributes.set(EAttribute.CRITDMG, this.critDamage);
 
-    this.damage = Attribute.create(10, this.currentModifiers) as Attribute;
+    this.damage = Attribute.create(10, this.currentModifiers, 0) as Attribute;
     watchEffect(() =>
       this.damage.setBaseAttributeIncrement(
         Math.max(
