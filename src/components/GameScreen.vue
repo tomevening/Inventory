@@ -1,13 +1,14 @@
 <script setup lang="ts">
+  // Main component that holds all other components in it.
+
   import { useStoreGame } from '@/stores';
   import { computed } from 'vue';
-  import DebugButton from './DebugButton.vue';
+
   import Inventory from './Inventory.vue';
   import PlayerStats from './PlayerStats.vue';
   import Shop from './Shop.vue';
 
   const storeGame = useStoreGame();
-  // const storeAttributes = useStoreAttributes();
 
   const shopSelected = computed(() => {
     return storeGame.shops[storeGame.selectedShopId];
@@ -59,7 +60,6 @@
     :player="storeGame.player"
     class="player-stats"
   />
-  <DebugButton></DebugButton>
 </template>
 
 <style scoped lang="scss">

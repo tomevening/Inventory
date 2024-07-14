@@ -8,10 +8,7 @@
   }>();
 
   const itemClasses = computed(() => {
-    if (!props.item.icon.brightness) {
-      return 'dark';
-    }
-    return '';
+    return props.item.icon.isBright ? '' : 'dark';
   });
 </script>
 

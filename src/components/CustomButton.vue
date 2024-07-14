@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  // An old reusable component that helps create custom buttons.
+
   import { computed, defineProps } from 'vue';
 
   const props = withDefaults(

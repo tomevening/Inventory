@@ -1,3 +1,6 @@
+// Recipes are items that dont't do anything on their own but show how to create more powerful
+// artifacts using basic items
+
 import { Item } from '@/models/item';
 import { Product } from '@/models/product';
 import { ProductIcon } from '@/models/product-icon';
@@ -13,8 +16,7 @@ export class Recipe extends Product<Recipe> {
   }
 
   setIcon(): ProductIcon {
-    const icon = new ProductIcon(this.name, 0);
-    return icon;
+    return new ProductIcon(this.name, false); // Recipes icons are darkened
   }
 
   public clone() {

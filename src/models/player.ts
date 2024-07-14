@@ -95,6 +95,7 @@ export class Player {
     );
     this.attributes.set(EAttribute.DMG, this.damage);
 
+    // Damage per second is not a full-fledged attribute, it is calculated based on dmg and as
     this.DPS = computed(
       () => this.damage.result * (1 / this.attackCooldown.value),
     );
@@ -108,6 +109,8 @@ export class Player {
     });
   }
 
+  // Gather and return all the attribute modifications from equipped items
+  // As a getter of a reactive object, it works as a Computed
   public get currentModifiers() {
     const modifiers: AttributeModifier[] = [];
     for (const item of this.inventory) {
@@ -131,7 +134,6 @@ export class Player {
           break;
       }
     });
-    // console.log(modifiers);
 
     return shallowReactive(modifiers);
   }
@@ -144,6 +146,7 @@ export class Player {
     });
   }
 
+  // This function allows us to create reactive instances of this class
   public static create() {
     return shallowReactive(new Player());
   }

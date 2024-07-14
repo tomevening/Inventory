@@ -1,13 +1,14 @@
-import { ProductIcon } from '@/models/product-icon';
-// import { AttributeModifier } from '@/types';
+// Product is an abstract class that contains things in common between Item and Recipe.
+
 import { AttributeModifier } from '@/models';
+import { ProductIcon } from '@/models/product-icon';
 import { newID } from '@/utils';
 export abstract class Product<T extends Product<T>> {
   public readonly name: string;
   public readonly goldCost: number;
-  public icon: ProductIcon;
+  public readonly icon: ProductIcon;
   public readonly id: string;
-  public attributes: AttributeModifier[];
+  public readonly attributes: AttributeModifier[];
 
   constructor(
     name: string,

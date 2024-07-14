@@ -3,7 +3,7 @@ export class ProductIcon {
 
   public constructor(
     productID: string | number,
-    public readonly brightness: number,
+    public readonly isBright: boolean,
   ) {
     this.path = `itemIcons/${productID}.jpg`;
   }
