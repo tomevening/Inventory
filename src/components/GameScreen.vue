@@ -3,7 +3,6 @@
 
   import { useStoreGame } from '@/stores';
   import { computed } from 'vue';
-
   import Inventory from './Inventory.vue';
   import PlayerStats from './PlayerStats.vue';
   import Shop from './Shop.vue';

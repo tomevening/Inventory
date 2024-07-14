@@ -1,8 +1,15 @@
-import { EAttribute, EModifierType } from '@/enums';
-import { AttributeModifier } from '@/models';
-import { defineStore } from 'pinia';
+// Pinia store that manages items and stores
 
-import { Item, Player, Product, Recipe, Shop } from '@/models';
+import { EAttribute, EModifierType } from '@/enums';
+import {
+  AttributeModifier,
+  Item,
+  Player,
+  Product,
+  Recipe,
+  Shop,
+} from '@/models';
+import { defineStore } from 'pinia';
 import { shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
@@ -10,6 +17,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   const maxInventorySize = 6;
   const selectedShopId = shallowRef(0);
 
+  // Creating all the items and giving them their attributes. Probably not perfectly balanced
   const iSwordAnc = new Item('Ancient Sword', 200, [
     new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 20),
     new AttributeModifier(EAttribute.ARMOR, EModifierType.INCREASE, -5),
@@ -17,7 +25,6 @@ export const useStoreGame = defineStore('storeGame', () => {
 
   const iSwordBlack = new Item('Black Sword', 125, [
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 25),
-    // new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, -10),
     new AttributeModifier(EAttribute.HEALTH, EModifierType.INCREASE, -200),
   ]);
 
@@ -88,7 +95,6 @@ export const useStoreGame = defineStore('storeGame', () => {
   ]);
   const iMiscApple = new Item('Red Apple', 20, [
     new AttributeModifier(EAttribute.HEALTH, EModifierType.PERCENTAGE, 10),
-    // new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, -30),
   ]);
   const iMiscRedSph = new Item('Red Sphere', 65, [
     new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, 5),
@@ -104,6 +110,22 @@ export const useStoreGame = defineStore('storeGame', () => {
     new AttributeModifier(EAttribute.STRENGTH, EModifierType.PERCENTAGE, 10),
   ]);
 
+  // Creating all recipes for multi-parts items
+  const rEpicSword = new Recipe(
+    [iSwordSteel, iMiscMagHat, iMiscGoldKey],
+    iSwordEpic,
+    100,
+  );
+
+  const rFireSword = new Recipe([iSwordSteel, iMiscFireCr], iSwordFire, 150);
+
+  const rDruidSword = new Recipe(
+    [iSwordStone, iMiscApple, iMiscPandAm],
+    iSwordDruid,
+    60,
+  );
+
+  // Creating all the shops
   const swordsShop = new Shop('Sword Shop', [
     iSwordStone,
     iSwordCopper,
@@ -129,20 +151,6 @@ export const useStoreGame = defineStore('storeGame', () => {
     iMiscFireCr,
   ]);
 
-  const rEpicSword = new Recipe(
-    [iSwordSteel, iMiscMagHat, iMiscGoldKey],
-    iSwordEpic,
-    100,
-  );
-
-  const rFireSword = new Recipe([iSwordSteel, iMiscFireCr], iSwordFire, 150);
-
-  const rDruidSword = new Recipe(
-    [iSwordStone, iMiscApple, iMiscPandAm],
-    iSwordDruid,
-    60,
-  );
-
   const tierOneShop = new Shop('Tier One Shop', [
     rEpicSword,
     rFireSword,
@@ -158,7 +166,7 @@ export const useStoreGame = defineStore('storeGame', () => {
       return;
     }
 
-    if (player.inventory.length === maxInventorySize) {
+    if (player.inventory.length >= maxInventorySize) {
       console.log("Can't carry more items");
       return;
     }
@@ -172,6 +180,7 @@ export const useStoreGame = defineStore('storeGame', () => {
     checkRecipes();
   }
 
+  // Checking if we have any recipes
   function checkRecipes() {
     const recipies = player.inventory.filter(
       (product): product is Recipe => product instanceof Recipe,
@@ -183,6 +192,7 @@ export const useStoreGame = defineStore('storeGame', () => {
     });
   }
 
+  // Checking if we have all the parts for any of the multi-parts items
   function tryAssemblingItem(recipe: Recipe, productNames: string[]) {
     const allPartPresent = recipe.parts.every(part =>
       productNames.includes(part.name),

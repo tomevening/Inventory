@@ -1,9 +1,7 @@
-import { ComputedRef, shallowReactive } from 'vue';
-import { AttributeModifier, Item, Product, Recipe } from '.';
-
 import { EAttribute, EModifierType } from '@/enums';
 import { Attribute } from '@/models';
-import { computed, watchEffect } from 'vue';
+import { ComputedRef, computed, shallowReactive, watchEffect } from 'vue';
+import { AttributeModifier, Item, Product, Recipe } from '.';
 
 export class Player {
   public readonly strength: Attribute;
