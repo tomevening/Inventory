@@ -1,4 +1,4 @@
-// Pinia store that manages items and stores
+// Pinia store that manages items and shops
 
 import { EAttribute, EModifierType } from '@/enums';
 import {

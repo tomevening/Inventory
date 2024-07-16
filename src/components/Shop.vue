@@ -16,7 +16,7 @@
         :key="item.id"
         class="shop-item"
         :item="item"
-        @click="() => buyItem(item)"
+        @click="buyItem(item)"
       />
     </div>
   </div>

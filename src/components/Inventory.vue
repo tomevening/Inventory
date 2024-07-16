@@ -16,7 +16,7 @@
         :key="item.id"
         class="inventory-item"
         :item="item"
-        @click.right.prevent="() => sellItem(item)"
+        @click.right.prevent="sellItem(item)"
       />
     </div>
   </div>

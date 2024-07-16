@@ -22,7 +22,7 @@
         :key="shop.id"
       >
         <img
-          alt="shop.name"
+          :alt="shop.name"
           class="h-20"
           :src="shop.icon"
           :style="{
@@ -31,7 +31,7 @@
                 ? '0 0 15px rgba(255,255,200,1)'
                 : 'none',
           }"
-          @click="() => storeGame.selectShop(storeGame.shops.indexOf(shop))"
+          @click="storeGame.selectShop(storeGame.shops.indexOf(shop))"
         />
       </div>
     </div>

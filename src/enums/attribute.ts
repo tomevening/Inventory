@@ -10,7 +10,7 @@ export const EAttribute = {
   HEALTH: 'Health',
   MANA: 'Mana',
   DPS: 'DPS',
-  DPSCRIT: 'CritDPS',
+  DPSCRIT: 'Crit DPS',
 } as const;
 
 export type EAttribute = (typeof EAttribute)[keyof typeof EAttribute];

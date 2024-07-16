@@ -6,9 +6,9 @@ import { AttributeModifier } from '.';
 export class Attribute {
   public baseStat: number;
   public readonly originalBaseStat: number;
-  public numberIncreases: number[];
-  public percentageIncreases: number[];
-  public multipliers: number[];
+  public readonly numberIncreases: number[];
+  public readonly percentageIncreases: number[];
+  public readonly multipliers: number[];
   public readonly modifiers: ShallowReactive<AttributeModifier[]>;
   public readonly minCap?: number; // Some stats can't go lower than 1 or 0 (like HP)
   public readonly maxCap?: number; // Some stats can't go higher than 100 (like crit chance)
