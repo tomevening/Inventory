@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  // Main component that holds all other components in it.
+  /** Main component that holds all other components in it. */
 
   import { useStoreGame } from '@/stores';
   import { computed } from 'vue';

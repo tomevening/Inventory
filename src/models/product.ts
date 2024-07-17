@@ -1,8 +1,8 @@
-// Product is an abstract class that contains things in common between Item and Recipe.
-
 import { AttributeModifier } from '@/models';
 import { ProductIcon } from '@/models/product-icon';
 import { newID } from '@/utils';
+/** Product is an abstract class that contains things in common between Item and Recipe.*/
+
 export abstract class Product<T extends Product<T>> {
   public readonly name: string;
   public readonly goldCost: number;

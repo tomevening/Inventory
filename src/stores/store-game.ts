@@ -1,4 +1,4 @@
-// Pinia store that manages items and shops
+/**  Pinia store that manages items and shops */
 
 import { EAttribute, EModifierType } from '@/enums';
 import {
@@ -160,6 +160,8 @@ export const useStoreGame = defineStore('storeGame', () => {
   const shops = [swordsShop, miscShop, tierOneShop];
   const player = Player.create();
 
+  // Initialization ends here
+
   function buyItem(product: Product<any>) {
     if (product.goldCost > currentGold.value) {
       console.log('Not enough gold to buy!');
@@ -180,7 +182,7 @@ export const useStoreGame = defineStore('storeGame', () => {
     checkRecipes();
   }
 
-  // Checking if we have any recipes
+  /**  Checking if we have any recipes */
   function checkRecipes() {
     const recipies = player.inventory.filter(
       (product): product is Recipe => product instanceof Recipe,
@@ -192,7 +194,7 @@ export const useStoreGame = defineStore('storeGame', () => {
     });
   }
 
-  // Checking if we have all the parts for any of the multi-parts items
+  /**  Checking if we have all the parts for any of the multi-parts items */
   function tryAssemblingItem(recipe: Recipe, productNames: string[]) {
     const allPartPresent = recipe.parts.every(part =>
       productNames.includes(part.name),

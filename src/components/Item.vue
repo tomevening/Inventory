@@ -23,7 +23,7 @@
   </Tooltip>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
   .dark {
     filter: brightness(50%);
   }

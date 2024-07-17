@@ -14,6 +14,7 @@ export class Player {
   public readonly critChance: Attribute;
   public readonly critDamage: Attribute;
   public readonly damage: Attribute;
+  /**  Damage per second is not a full-fledged attribute, it is calculated based on dmg and AS */
   public readonly DPS: ComputedRef<number>;
   public readonly CritDPS: ComputedRef<number>;
   public readonly attackCooldown: ComputedRef<number>;
@@ -93,7 +94,6 @@ export class Player {
     );
     this.attributes.set(EAttribute.DMG, this.damage);
 
-    // Damage per second is not a full-fledged attribute, it is calculated based on dmg and as
     this.DPS = computed(
       () => this.damage.result * (1 / this.attackCooldown.value),
     );
@@ -107,8 +107,12 @@ export class Player {
     });
   }
 
-  // Gather and return all the attribute modifications from equipped items
-  // As a getter of a reactive object, it works as a Computed
+  /** This function allows us to create reactive instances of this class */
+  public static create() {
+    return shallowReactive(new Player());
+  }
+
+  /**  Gather and return all the attribute modifications from equipped items */
   public get currentModifiers() {
     const modifiers: AttributeModifier[] = [];
     for (const item of this.inventory) {
@@ -142,10 +146,5 @@ export class Player {
       attribute.percentageIncreases.length = 0;
       attribute.multipliers.length = 0;
     });
-  }
-
-  // This function allows us to create reactive instances of this class
-  public static create() {
-    return shallowReactive(new Player());
   }
 }

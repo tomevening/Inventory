@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  // An old reusable component that helps create custom buttons.
+  /** An old reusable component that helps create custom buttons. */
 
   import { computed, defineProps } from 'vue';
 
@@ -42,7 +42,7 @@
   </button>
 </template>
 
-<style>
+<style scoped lang="scss">
   .soft-blue {
     background-color: #007bff;
     color: #fff;

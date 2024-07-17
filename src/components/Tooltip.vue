@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  // Component that holds item data; only shown when hovering over an item.
+  /**  Component that holds item data; only shown when hovering over an item. */
 
   import { useTooltip } from '@/composables';
   import { EModifierType } from '@/enums';
@@ -85,4 +85,4 @@
   </div>
 </template>
 
-<style lang="scss"></style>
+<style scoped lang="scss"></style>

@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
   .stats {
     display: flex;
     flex-direction: column;
