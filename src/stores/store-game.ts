@@ -164,12 +164,12 @@ export const useStoreGame = defineStore('storeGame', () => {
 
   function buyItem(product: Product<any>) {
     if (product.goldCost > currentGold.value) {
-      console.log('Not enough gold to buy!');
+      alert('Not enough gold to buy!');
       return;
     }
 
     if (player.inventory.length >= maxInventorySize) {
-      console.log("Can't carry more items");
+      alert("Can't carry more items");
       return;
     }
 
@@ -188,10 +188,10 @@ export const useStoreGame = defineStore('storeGame', () => {
       (product): product is Recipe => product instanceof Recipe,
     );
     const productNames = player.inventory.map(product => product.name);
-    recipies.forEach(recipe => {
+    for (const recipe of recipies) {
       console.log('Recipe found');
       tryAssemblingItem(recipe, productNames);
-    });
+    }
   }
 
   /**  Checking if we have all the parts for any of the multi-parts items */
@@ -203,7 +203,9 @@ export const useStoreGame = defineStore('storeGame', () => {
     if (!allPartPresent) return;
 
     console.log(`Finished recipe found: ${recipe.name}. Combining...`);
-    recipe.parts.forEach(part => removeItemByName(part.name));
+    for (const part of recipe.parts) {
+      removeItemByName(part.name);
+    }
     addItem(recipe.result);
     removeItem(recipe);
   }

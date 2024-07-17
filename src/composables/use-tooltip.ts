@@ -1,4 +1,11 @@
-import { onMounted, onUnmounted, ref, shallowReactive, shallowRef } from 'vue';
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+  shallowReactive,
+  shallowReadonly,
+  shallowRef,
+} from 'vue';
 
 export function useTooltip() {
   const isTooltipVisible = shallowRef(false);
@@ -35,9 +42,9 @@ export function useTooltip() {
     el?.removeEventListener('mousemove', updateTooltipPosition);
   });
 
-  return {
+  return shallowReadonly({
     isTooltipVisible,
     tooltipPosition,
     tooltipRef,
-  };
+  });
 }

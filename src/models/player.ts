@@ -120,7 +120,7 @@ export class Player {
     }
 
     this.clearStats();
-    modifiers.forEach(modifier => {
+    for (const modifier of modifiers) {
       const attributeToChange = this.attributes.get(modifier.attribute);
       switch (modifier.modifierType) {
         case EModifierType.INCREASE:
@@ -135,16 +135,16 @@ export class Player {
           attributeToChange?.multipliers.push(modifier.value);
           break;
       }
-    });
+    }
 
     return shallowReactive(modifiers);
   }
 
   private clearStats() {
-    this.attributes.forEach(attribute => {
+    for (const attribute of this.attributes.values()) {
       attribute.numberIncreases.length = 0;
       attribute.percentageIncreases.length = 0;
       attribute.multipliers.length = 0;
-    });
+    }
   }
 }
