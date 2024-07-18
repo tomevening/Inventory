@@ -1,15 +1,10 @@
 <script setup lang="ts">
-  import { Product } from '@/models';
-  import { computed } from 'vue';
+  import { ProductAny } from '@/models';
   import Tooltip from './Tooltip.vue';
 
   const props = defineProps<{
-    item: Product<any>;
+    item: ProductAny;
   }>();
-
-  const itemClasses = computed(() => {
-    return props.item.icon.isBright ? '' : 'dark';
-  });
 </script>
 
 <template>
@@ -17,14 +12,12 @@
     <img
       alt="item.name"
       class="h-20"
-      :class="itemClasses"
+      :style="{
+        filter: props.item.icon.isBright ? '' : 'brightness(50%)',
+      }"
       :src="item.icon.path"
     />
   </Tooltip>
 </template>
 
-<style scoped lang="scss">
-  .dark {
-    filter: brightness(50%);
-  }
-</style>
+<style scoped lang="scss"></style>

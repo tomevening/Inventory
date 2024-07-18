@@ -5,17 +5,16 @@ import {
   AttributeModifier,
   Item,
   Player,
-  Product,
+  ProductAny,
   Recipe,
   Shop,
 } from '@/models';
 import { defineStore } from 'pinia';
-import { shallowReadonly, shallowRef } from 'vue';
+import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
 
 export const useStoreGame = defineStore('storeGame', () => {
   const currentGold = shallowRef(1500);
   const maxInventorySize = 6;
-  const selectedShopId = shallowRef(0);
 
   // Creating all the items and giving them their attributes. Probably not perfectly balanced
   const iSwordAnc = new Item('Ancient Sword', 200, [
@@ -157,12 +156,13 @@ export const useStoreGame = defineStore('storeGame', () => {
     rDruidSword,
   ]);
 
-  const shops = [swordsShop, miscShop, tierOneShop];
+  const shops = shallowReactive([swordsShop, miscShop, tierOneShop]);
+  const selectedShop = shallowRef<Shop>(shops[0]);
   const player = Player.create();
 
   // Initialization ends here
 
-  function buyItem(product: Product<any>) {
+  function buyItem(product: ProductAny) {
     if (product.goldCost > currentGold.value) {
       alert('Not enough gold to buy!');
       return;
@@ -177,7 +177,7 @@ export const useStoreGame = defineStore('storeGame', () => {
     addItem(product);
   }
 
-  function addItem(product: Product<any>) {
+  function addItem(product: ProductAny) {
     player.inventory.push(product.clone());
     checkRecipes();
   }
@@ -210,12 +210,12 @@ export const useStoreGame = defineStore('storeGame', () => {
     removeItem(recipe);
   }
 
-  function sellItem(product: Product<any>) {
+  function sellItem(product: ProductAny) {
     currentGold.value += Math.round(product.goldCost / 2);
     removeItem(product);
   }
 
-  function removeItem(product: Product<any>) {
+  function removeItem(product: ProductAny) {
     const itemIndex = player.inventory.indexOf(product);
     if (itemIndex === -1) {
       console.log('Item not found');
@@ -230,8 +230,8 @@ export const useStoreGame = defineStore('storeGame', () => {
     removeItem(item);
   }
 
-  function selectShop(shopID: number) {
-    selectedShopId.value = shopID;
+  function selectShop(shop: Shop) {
+    selectedShop.value = shop;
   }
 
   return shallowReadonly({
@@ -239,8 +239,8 @@ export const useStoreGame = defineStore('storeGame', () => {
     player,
     buyItem,
     sellItem,
-    selectedShopId,
     selectShop,
     currentGold,
+    selectedShop,
   });
 });

@@ -1,88 +1,81 @@
 import { EAttribute, EModifierType } from '@/enums';
 import { Attribute } from '@/models';
-import { ComputedRef, computed, shallowReactive, watchEffect } from 'vue';
+import {
+  ComputedRef,
+  UnwrapNestedRefs,
+  computed,
+  reactive,
+  shallowReactive,
+  watchEffect,
+} from 'vue';
 import { AttributeModifier, Item, Product, Recipe } from '.';
 
 export class Player {
-  public readonly strength: Attribute;
-  public readonly health: Attribute;
-  public readonly agility: Attribute;
-  public readonly armor: Attribute;
-  public readonly attackSpeed: Attribute;
-  public readonly intelligence: Attribute;
-  public readonly mana: Attribute;
-  public readonly critChance: Attribute;
-  public readonly critDamage: Attribute;
-  public readonly damage: Attribute;
+  public readonly strength: UnwrapNestedRefs<Attribute>;
+  public readonly health: UnwrapNestedRefs<Attribute>;
+  public readonly agility: UnwrapNestedRefs<Attribute>;
+  public readonly armor: UnwrapNestedRefs<Attribute>;
+  public readonly attackSpeed: UnwrapNestedRefs<Attribute>;
+  public readonly intelligence: UnwrapNestedRefs<Attribute>;
+  public readonly mana: UnwrapNestedRefs<Attribute>;
+  public readonly critChance: UnwrapNestedRefs<Attribute>;
+  public readonly critDamage: UnwrapNestedRefs<Attribute>;
+  public readonly damage: UnwrapNestedRefs<Attribute>;
   /**  Damage per second is not a full-fledged attribute, it is calculated based on dmg and AS */
   public readonly DPS: ComputedRef<number>;
   public readonly CritDPS: ComputedRef<number>;
   public readonly attackCooldown: ComputedRef<number>;
-  public readonly attributes: Map<EAttribute, Attribute>;
+  // public readonly attributes: Map<EAttribute, Attribute>;
 
   public readonly inventory = shallowReactive<Product<Item | Recipe>[]>([]);
+  public readonly attributes = reactive(
+    new Map<EAttribute, UnwrapNestedRefs<Attribute>>(),
+  );
 
   private constructor() {
-    this.attributes = new Map<EAttribute, Attribute>();
+    // this.attributes = new Map<EAttribute, Attribute>();  TODO: return if reactivity is not needed
 
-    this.strength = Attribute.create(10, this.currentModifiers, 0) as Attribute;
+    this.strength = Attribute.create(10, this.currentModifiers, 0);
     this.attributes.set(EAttribute.STRENGTH, this.strength);
 
-    this.health = Attribute.create(100, this.currentModifiers, 1) as Attribute;
+    this.health = Attribute.create(100, this.currentModifiers, 1);
     watchEffect(() =>
       this.health.setBaseAttributeIncrement(this.strength.result * 6),
     );
     this.attributes.set(EAttribute.HEALTH, this.health);
 
-    this.agility = Attribute.create(10, this.currentModifiers, 0) as Attribute;
+    this.agility = Attribute.create(10, this.currentModifiers, 0);
     this.attributes.set(EAttribute.AGILITY, this.agility);
 
-    this.armor = Attribute.create(5, this.currentModifiers) as Attribute;
+    this.armor = Attribute.create(5, this.currentModifiers);
     watchEffect(() =>
       this.armor.setBaseAttributeIncrement(this.agility.result * 0.2),
     );
     this.attributes.set(EAttribute.ARMOR, this.armor);
 
-    this.attackSpeed = Attribute.create(
-      1,
-      this.currentModifiers,
-      0.1,
-    ) as Attribute;
+    this.attackSpeed = Attribute.create(1, this.currentModifiers, 0.1);
     watchEffect(() =>
       this.attackSpeed.setBaseAttributeIncrement(this.agility.result * 0.2),
     );
     this.attributes.set(EAttribute.ATTACKSPEED, this.attackSpeed);
     this.attackCooldown = computed(() => 1 / this.attackSpeed.result);
 
-    this.intelligence = Attribute.create(
-      10,
-      this.currentModifiers,
-      0,
-    ) as Attribute;
+    this.intelligence = Attribute.create(10, this.currentModifiers, 0);
     this.attributes.set(EAttribute.INTELLIGENCE, this.intelligence);
 
-    this.mana = Attribute.create(100, this.currentModifiers, 0) as Attribute;
+    this.mana = Attribute.create(100, this.currentModifiers, 0);
     watchEffect(() =>
       this.mana.setBaseAttributeIncrement(this.intelligence.result * 6),
     );
     this.attributes.set(EAttribute.MANA, this.mana);
 
-    this.critChance = Attribute.create(
-      10,
-      this.currentModifiers,
-      0,
-      100,
-    ) as Attribute;
+    this.critChance = Attribute.create(10, this.currentModifiers, 0, 100);
     this.attributes.set(EAttribute.CRITCHANCE, this.critChance);
 
-    this.critDamage = Attribute.create(
-      2,
-      this.currentModifiers,
-      1,
-    ) as Attribute;
+    this.critDamage = Attribute.create(2, this.currentModifiers, 1);
     this.attributes.set(EAttribute.CRITDMG, this.critDamage);
 
-    this.damage = Attribute.create(10, this.currentModifiers, 0) as Attribute;
+    this.damage = Attribute.create(10, this.currentModifiers, 0);
     watchEffect(() =>
       this.damage.setBaseAttributeIncrement(
         Math.max(

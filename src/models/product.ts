@@ -25,3 +25,5 @@ export abstract class Product<T extends Product<T>> {
   abstract setIcon(): ProductIcon;
   public abstract clone(): T;
 }
+
+export type ProductAny = Product<any>;

@@ -3,15 +3,15 @@
 
   import { useTooltip } from '@/composables';
   import { EModifierType } from '@/enums';
-  import { AttributeModifier, Item, Product, Recipe } from '@/models';
+  import { AttributeModifier, Item, ProductAny, Recipe } from '@/models';
 
   defineProps<{
-    item: Product<any>;
+    item: ProductAny;
   }>();
 
   const { isTooltipVisible, tooltipPosition, tooltipRef } = useTooltip();
 
-  function getAttributeModifiers(product: Product<any>) {
+  function getAttributeModifiers(product: ProductAny) {
     if (product instanceof Item) {
       return product.attributes;
     }
@@ -39,7 +39,7 @@
     return result;
   }
 
-  function showParts(product: Product<any>) {
+  function showParts(product: ProductAny) {
     if (!(product instanceof Recipe)) return '';
     return product.parts.map(part => part.name);
   }

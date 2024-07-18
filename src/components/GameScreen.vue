@@ -2,23 +2,18 @@
   /** Main component that holds all other components in it. */
 
   import { useStoreGame } from '@/stores';
-  import { computed } from 'vue';
   import Inventory from './Inventory.vue';
   import PlayerStats from './PlayerStats.vue';
   import Shop from './Shop.vue';
 
   const storeGame = useStoreGame();
-
-  const shopSelected = computed(() => {
-    return storeGame.shops[storeGame.selectedShopId];
-  });
 </script>
 
 <template>
   <div class="top-grid">
     <div class="flex flex-row p-1 space-x-2 bg-gray-800">
       <div
-        v-for="(shop, index) in storeGame.shops"
+        v-for="shop in storeGame.shops"
         :key="shop.id"
       >
         <img
@@ -27,11 +22,11 @@
           :src="shop.icon"
           :style="{
             'box-shadow':
-              storeGame.selectedShopId === index
+              storeGame.selectedShop === shop
                 ? '0 0 15px rgba(255,255,200,1)'
                 : 'none',
           }"
-          @click="storeGame.selectShop(storeGame.shops.indexOf(shop))"
+          @click="storeGame.selectShop(shop)"
         />
       </div>
     </div>
@@ -44,7 +39,7 @@
     <div>
       <Shop
         :buy-item="storeGame.buyItem"
-        :items="shopSelected.items"
+        :items="storeGame.selectedShop.items"
       />
     </div>
     <div></div>
