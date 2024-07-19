@@ -14,13 +14,16 @@ export class Item extends Product<Item> {
     console.log(`Item ${this.name} created`);
   }
 
-  setIcon(): ProductIcon {
-    const icon = new ProductIcon(this.name, true); // True means that an icon should be bright
-    return icon;
+  public createIcon(): ProductIcon {
+    return new ProductIcon(this.name, true); // True means that an icon should be bright
   }
 
   //  We buy items by cloning them into player's inventory
   public clone(): Item {
     return new Item(this.name, this.goldCost, this.attributes);
+  }
+
+  public getAttributeModifiers(): AttributeModifier[] {
+    return this.attributes;
   }
 }

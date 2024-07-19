@@ -17,13 +17,14 @@ export abstract class Product<T extends Product<T>> {
   ) {
     this.name = name;
     this.goldCost = goldCost;
-    this.icon = this.setIcon();
+    this.icon = this.createIcon();
     this.id = newID();
     attributes ? (this.attributes = attributes) : (this.attributes = []);
   }
 
-  abstract setIcon(): ProductIcon;
+  public abstract createIcon(): ProductIcon;
   public abstract clone(): T;
+  public abstract getAttributeModifiers(): AttributeModifier[];
 }
 
 export type ProductAny = Product<any>;

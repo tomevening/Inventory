@@ -30,16 +30,18 @@ export function useTooltip() {
 
   onMounted(() => {
     const el = tooltipRef.value;
-    el?.addEventListener('mouseenter', showTooltip);
-    el?.addEventListener('mouseleave', hideTooltip);
-    el?.addEventListener('mousemove', updateTooltipPosition);
+    if (!el) return;
+    el.addEventListener('mouseenter', showTooltip);
+    el.addEventListener('mouseleave', hideTooltip);
+    el.addEventListener('mousemove', updateTooltipPosition);
   });
 
   onUnmounted(() => {
     const el = tooltipRef.value;
-    el?.removeEventListener('mouseenter', showTooltip);
-    el?.removeEventListener('mouseleave', hideTooltip);
-    el?.removeEventListener('mousemove', updateTooltipPosition);
+    if (!el) return;
+    el.removeEventListener('mouseenter', showTooltip);
+    el.removeEventListener('mouseleave', hideTooltip);
+    el.removeEventListener('mousemove', updateTooltipPosition);
   });
 
   return shallowReadonly({

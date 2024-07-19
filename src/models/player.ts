@@ -35,47 +35,47 @@ export class Player {
   private constructor() {
     // this.attributes = new Map<EAttribute, Attribute>();  TODO: return if reactivity is not needed
 
-    this.strength = Attribute.create(10, this.currentModifiers, 0);
+    this.strength = Attribute.create(10, 0);
     this.attributes.set(EAttribute.STRENGTH, this.strength);
 
-    this.health = Attribute.create(100, this.currentModifiers, 1);
+    this.health = Attribute.create(100, 1);
     watchEffect(() =>
       this.health.setBaseAttributeIncrement(this.strength.result * 6),
     );
     this.attributes.set(EAttribute.HEALTH, this.health);
 
-    this.agility = Attribute.create(10, this.currentModifiers, 0);
+    this.agility = Attribute.create(10, 0);
     this.attributes.set(EAttribute.AGILITY, this.agility);
 
-    this.armor = Attribute.create(5, this.currentModifiers);
+    this.armor = Attribute.create(5);
     watchEffect(() =>
       this.armor.setBaseAttributeIncrement(this.agility.result * 0.2),
     );
     this.attributes.set(EAttribute.ARMOR, this.armor);
 
-    this.attackSpeed = Attribute.create(1, this.currentModifiers, 0.1);
+    this.attackSpeed = Attribute.create(1, 0.1);
     watchEffect(() =>
       this.attackSpeed.setBaseAttributeIncrement(this.agility.result * 0.2),
     );
     this.attributes.set(EAttribute.ATTACKSPEED, this.attackSpeed);
     this.attackCooldown = computed(() => 1 / this.attackSpeed.result);
 
-    this.intelligence = Attribute.create(10, this.currentModifiers, 0);
+    this.intelligence = Attribute.create(10, 0);
     this.attributes.set(EAttribute.INTELLIGENCE, this.intelligence);
 
-    this.mana = Attribute.create(100, this.currentModifiers, 0);
+    this.mana = Attribute.create(100, 0);
     watchEffect(() =>
       this.mana.setBaseAttributeIncrement(this.intelligence.result * 6),
     );
     this.attributes.set(EAttribute.MANA, this.mana);
 
-    this.critChance = Attribute.create(10, this.currentModifiers, 0, 100);
+    this.critChance = Attribute.create(10, 0, 100);
     this.attributes.set(EAttribute.CRITCHANCE, this.critChance);
 
-    this.critDamage = Attribute.create(2, this.currentModifiers, 1);
+    this.critDamage = Attribute.create(2, 1);
     this.attributes.set(EAttribute.CRITDMG, this.critDamage);
 
-    this.damage = Attribute.create(10, this.currentModifiers, 0);
+    this.damage = Attribute.create(10, 0);
     watchEffect(() =>
       this.damage.setBaseAttributeIncrement(
         Math.max(
@@ -115,17 +115,18 @@ export class Player {
     this.clearStats();
     for (const modifier of modifiers) {
       const attributeToChange = this.attributes.get(modifier.attribute);
+      if (!attributeToChange) continue;
       switch (modifier.modifierType) {
         case EModifierType.INCREASE:
-          attributeToChange?.numberIncreases.push(modifier.value);
+          attributeToChange.numberIncreases.push(modifier.value);
           break;
 
         case EModifierType.PERCENTAGE:
-          attributeToChange?.percentageIncreases.push(modifier.value);
+          attributeToChange.percentageIncreases.push(modifier.value);
           break;
 
         case EModifierType.MULTIPLIER:
-          attributeToChange?.multipliers.push(modifier.value);
+          attributeToChange.multipliers.push(modifier.value);
           break;
       }
     }

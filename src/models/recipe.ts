@@ -1,6 +1,7 @@
 import { Item } from '@/models/item';
 import { Product } from '@/models/product';
 import { ProductIcon } from '@/models/product-icon';
+import { AttributeModifier } from '.';
 /**
  * Recipes are items that dont't do anything on their own but show how to create more powerful
  * artifacts using basic items
@@ -17,11 +18,15 @@ export class Recipe extends Product<Recipe> {
     console.log(`Recipe for ${this.result.name} created`);
   }
 
-  setIcon(): ProductIcon {
+  public createIcon(): ProductIcon {
     return new ProductIcon(this.name, false); // False means that an icon should be darkened
   }
 
   public clone() {
     return new Recipe(this.parts, this.result, this.goldCost);
+  }
+
+  public getAttributeModifiers(): AttributeModifier[] {
+    return this.result.attributes;
   }
 }

@@ -3,22 +3,13 @@
 
   import { useTooltip } from '@/composables';
   import { EModifierType } from '@/enums';
-  import { AttributeModifier, Item, ProductAny, Recipe } from '@/models';
+  import { AttributeModifier, ProductAny, Recipe } from '@/models';
 
   defineProps<{
     item: ProductAny;
   }>();
 
   const { isTooltipVisible, tooltipPosition, tooltipRef } = useTooltip();
-
-  function getAttributeModifiers(product: ProductAny) {
-    if (product instanceof Item) {
-      return product.attributes;
-    }
-    if (product instanceof Recipe) {
-      return product.result.attributes;
-    }
-  }
 
   function showAttribute(attribute: AttributeModifier) {
     let result = '';
@@ -40,7 +31,7 @@
   }
 
   function showParts(product: ProductAny) {
-    if (!(product instanceof Recipe)) return '';
+    if (!(product instanceof Recipe)) return [];
     return product.parts.map(part => part.name);
   }
 </script>
@@ -63,7 +54,7 @@
       <div class="inline-block text-yellow-400">{{ item.goldCost }} Gold</div>
 
       <div
-        v-for="attribute in getAttributeModifiers(item)"
+        v-for="attribute in item.getAttributeModifiers()"
         :key="item.id"
       >
         {{ showAttribute(attribute) }}
@@ -71,7 +62,7 @@
 
       <div
         class="text-blue-700"
-        v-if="showParts(item)"
+        v-if="showParts(item).length > 0"
       >
         Parts:
       </div>

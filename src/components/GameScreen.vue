@@ -7,6 +7,7 @@
   import Shop from './Shop.vue';
 
   const storeGame = useStoreGame();
+  console.log(storeGame.shops[0].items);
 </script>
 
 <template>
