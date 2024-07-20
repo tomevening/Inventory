@@ -10,7 +10,7 @@ export class Shop {
   public constructor(name: string, items: ProductAny[]) {
     this.name = name;
     this.items = items;
-    this.icon = 'itemIcons/' + name + '.jpg';
+    this.icon = `itemIcons/${this.name}.jpg`;
     this.id = newId();
 
     console.log(`Shop ${this.name} created`);

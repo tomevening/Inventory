@@ -4,7 +4,10 @@
 
   defineProps<{
     items: ProductAny[];
-    buyItem: (item: ProductAny) => void;
+  }>();
+
+  const emit = defineEmits<{
+    (event: 'buy', product: ProductAny): void;
   }>();
 </script>
 
@@ -16,7 +19,7 @@
         :key="item.id"
         class="shop-item"
         :item="item"
-        @click="buyItem(item)"
+        @click="emit('buy', item)"
       />
     </div>
   </div>

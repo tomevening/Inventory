@@ -1,5 +1,3 @@
-/**  Pinia store that manages items and shops */
-
 import { EAttribute, EModifierType } from '@/enums';
 import {
   AttributeModifier,
@@ -11,11 +9,11 @@ import {
 } from '@/models';
 import { defineStore } from 'pinia';
 import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
+/**  Pinia store that manages items and shops */
+
+const MAX_INVENTORY_SIZE = 6;
 
 export const useStoreGame = defineStore('storeGame', () => {
-  const currentGold = shallowRef(1500);
-  const maxInventorySize = 6;
-
   // Creating all the items and giving them their attributes. Probably not perfectly balanced
   const iSwordAnc = new Item('Ancient Sword', 200, [
     new AttributeModifier(EAttribute.DMG, EModifierType.INCREASE, 20),
@@ -163,17 +161,17 @@ export const useStoreGame = defineStore('storeGame', () => {
   // Initialization ends here
 
   function buyItem(product: ProductAny) {
-    if (product.goldCost > currentGold.value) {
+    if (product.goldCost > player.currentGold.value) {
       alert('Not enough gold to buy!');
       return;
     }
 
-    if (player.inventory.length >= maxInventorySize) {
+    if (player.inventory.length >= MAX_INVENTORY_SIZE) {
       alert("Can't carry more items");
       return;
     }
 
-    currentGold.value -= product.goldCost;
+    player.currentGold.value -= product.goldCost;
     addItem(product);
   }
 
@@ -211,7 +209,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   }
 
   function sellItem(product: ProductAny) {
-    currentGold.value += Math.round(product.goldCost / 2);
+    player.currentGold.value += Math.round(product.goldCost / 2);
     removeItem(product);
   }
 
@@ -240,7 +238,6 @@ export const useStoreGame = defineStore('storeGame', () => {
     buyItem,
     sellItem,
     selectShop,
-    currentGold,
     selectedShop,
   });
 });

@@ -32,14 +32,14 @@
       </div>
     </div>
     <div class="bg-gray-300 flex justify-center items-center text-yellow-600">
-      Gold left: {{ storeGame.currentGold }}
+      Gold left: {{ storeGame.player.currentGold }}
     </div>
   </div>
 
   <div class="grid-container">
     <div>
       <Shop
-        :buy-item="storeGame.buyItem"
+        @buy="product => storeGame.buyItem(product)"
         :items="storeGame.selectedShop.items"
       />
     </div>

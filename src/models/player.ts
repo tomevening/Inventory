@@ -2,25 +2,26 @@ import { EAttribute, EModifierType } from '@/enums';
 import { Attribute } from '@/models';
 import {
   ComputedRef,
-  UnwrapNestedRefs,
+  Reactive,
   computed,
   reactive,
   shallowReactive,
+  shallowRef,
   watchEffect,
 } from 'vue';
 import { AttributeModifier, Item, Product, Recipe } from '.';
 
 export class Player {
-  public readonly strength: UnwrapNestedRefs<Attribute>;
-  public readonly health: UnwrapNestedRefs<Attribute>;
-  public readonly agility: UnwrapNestedRefs<Attribute>;
-  public readonly armor: UnwrapNestedRefs<Attribute>;
-  public readonly attackSpeed: UnwrapNestedRefs<Attribute>;
-  public readonly intelligence: UnwrapNestedRefs<Attribute>;
-  public readonly mana: UnwrapNestedRefs<Attribute>;
-  public readonly critChance: UnwrapNestedRefs<Attribute>;
-  public readonly critDamage: UnwrapNestedRefs<Attribute>;
-  public readonly damage: UnwrapNestedRefs<Attribute>;
+  public readonly strength: Reactive<Attribute>;
+  public readonly health: Reactive<Attribute>;
+  public readonly agility: Reactive<Attribute>;
+  public readonly armor: Reactive<Attribute>;
+  public readonly attackSpeed: Reactive<Attribute>;
+  public readonly intelligence: Reactive<Attribute>;
+  public readonly mana: Reactive<Attribute>;
+  public readonly critChance: Reactive<Attribute>;
+  public readonly critDamage: Reactive<Attribute>;
+  public readonly damage: Reactive<Attribute>;
   /**  Damage per second is not a full-fledged attribute, it is calculated based on dmg and AS */
   public readonly DPS: ComputedRef<number>;
   public readonly CritDPS: ComputedRef<number>;
@@ -29,11 +30,14 @@ export class Player {
 
   public readonly inventory = shallowReactive<Product<Item | Recipe>[]>([]);
   public readonly attributes = reactive(
-    new Map<EAttribute, UnwrapNestedRefs<Attribute>>(),
+    new Map<EAttribute, Reactive<Attribute>>(),
   );
+  public readonly currentGold;
 
   private constructor() {
     // this.attributes = new Map<EAttribute, Attribute>();  TODO: return if reactivity is not needed
+
+    this.currentGold = shallowRef(1500);
 
     this.strength = Attribute.create(10, 0);
     this.attributes.set(EAttribute.STRENGTH, this.strength);

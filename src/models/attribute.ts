@@ -4,7 +4,7 @@ import { reactive } from 'vue';
 
 export class Attribute {
   private constructor(
-    public baseStat: number,
+    baseStat: number,
     /** Some stats can't go lower than 1 or 0 (like HP) */
     public readonly minCap?: number,
     /** Some stats can't go higher than 100 (like crit chance) */
@@ -14,9 +14,15 @@ export class Attribute {
     public readonly percentageIncreases: number[] = [],
     public readonly multipliers: number[] = [],
   ) {
-    this.baseStat = baseStat;
+    this._baseStat = baseStat;
     this.minCap = minCap;
     this.maxCap = maxCap;
+  }
+
+  private _baseStat: number;
+
+  public get baseStat() {
+    return this._baseStat;
   }
 
   /** This function allows us to create reactive instances of this class */
@@ -25,7 +31,7 @@ export class Attribute {
   }
 
   public get result(): number {
-    let result = this.baseStat;
+    let result = this._baseStat;
     result += this.calculateNumberIncrease();
     result += result * (this.calculatePercentageIncrease() / 100);
     result *= this.calculateMultipliers();
@@ -38,7 +44,7 @@ export class Attribute {
 
   /** Some attributes are increased alongsides others (increasing strngth also increases HP and so on)*/
   public setBaseAttributeIncrement(increment: number) {
-    this.baseStat = this.originalBaseStat + increment;
+    this._baseStat = this.originalBaseStat + increment;
   }
 
   private calculateNumberIncrease() {
