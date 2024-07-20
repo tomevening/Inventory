@@ -4,7 +4,10 @@
 
   defineProps<{
     items: ProductAny[];
-    sellItem: (item: ProductAny) => void;
+  }>();
+
+  const emit = defineEmits<{
+    (event: 'sell', product: ProductAny): void;
   }>();
 </script>
 
@@ -16,7 +19,7 @@
         :key="item.id"
         class="inventory-item"
         :item="item"
-        @click.right.prevent="sellItem(item)"
+        @click.right.prevent="emit('sell', item)"
       />
     </div>
   </div>

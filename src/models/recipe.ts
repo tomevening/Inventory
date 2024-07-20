@@ -8,13 +8,12 @@ import { AttributeModifier } from '.';
  * */
 
 export class Recipe extends Product<Recipe> {
-  public readonly parts: Item[];
-  public readonly result: Item;
-
-  constructor(parts: Item[], result: Item, goldCost: number) {
+  public constructor(
+    public readonly parts: Item[],
+    public readonly result: Item,
+    goldCost: number,
+  ) {
     super(result.name, goldCost);
-    this.parts = parts;
-    this.result = result;
     console.log(`Recipe for ${this.result.name} created`);
   }
 

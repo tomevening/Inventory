@@ -3,22 +3,18 @@ import { reactive } from 'vue';
 /** Instances of this class are attributes like Strength, Damage, or Crit chance. */
 
 export class Attribute {
-  public baseStat: number;
-  public readonly originalBaseStat: number;
-  public readonly numberIncreases: number[];
-  public readonly percentageIncreases: number[];
-  public readonly multipliers: number[];
-  /** Some stats can't go lower than 1 or 0 (like HP) */
-  public readonly minCap?: number;
-  /** Some stats can't go higher than 100 (like crit chance) */
-  public readonly maxCap?: number;
-
-  private constructor(baseStat: number, minCap?: number, maxCap?: number) {
+  private constructor(
+    public baseStat: number,
+    /** Some stats can't go lower than 1 or 0 (like HP) */
+    public readonly minCap?: number,
+    /** Some stats can't go higher than 100 (like crit chance) */
+    public readonly maxCap?: number,
+    public readonly originalBaseStat: number = baseStat,
+    public readonly numberIncreases: number[] = [],
+    public readonly percentageIncreases: number[] = [],
+    public readonly multipliers: number[] = [],
+  ) {
     this.baseStat = baseStat;
-    this.originalBaseStat = baseStat;
-    this.numberIncreases = [];
-    this.percentageIncreases = [];
-    this.multipliers = [];
     this.minCap = minCap;
     this.maxCap = maxCap;
   }

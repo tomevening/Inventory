@@ -1,5 +1,5 @@
 import { ProductAny } from '@/models';
-import { newID } from '@/utils';
+import { newId } from '@/utils';
 
 export class Shop {
   public readonly name: string;
@@ -7,11 +7,11 @@ export class Shop {
   public readonly items: ProductAny[];
   public readonly id: string;
 
-  constructor(name: string, items: ProductAny[]) {
+  public constructor(name: string, items: ProductAny[]) {
     this.name = name;
     this.items = items;
     this.icon = 'itemIcons/' + name + '.jpg';
-    this.id = newID();
+    this.id = newId();
 
     console.log(`Shop ${this.name} created`);
   }

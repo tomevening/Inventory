@@ -4,13 +4,12 @@ import { ProductIcon } from '@/models/product-icon';
 /** Instances of this class are finished items (and not recipes). */
 
 export class Item extends Product<Item> {
-  constructor(
+  public constructor(
     name: string,
     goldCost: number,
     attributes?: AttributeModifier[],
   ) {
     super(name, goldCost, attributes);
-
     console.log(`Item ${this.name} created`);
   }
 
