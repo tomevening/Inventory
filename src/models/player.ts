@@ -9,8 +9,10 @@ import {
   shallowRef,
   watchEffect,
 } from 'vue';
-import { AttributeModifier, Item, Product, Recipe } from '.';
+import { AttributeModifier } from '.';
+import { Inventory } from './inventory';
 
+const MAX_INVENTORY_SIZE = 6;
 export class Player {
   public readonly strength: Reactive<Attribute>;
   public readonly health: Reactive<Attribute>;
@@ -28,7 +30,8 @@ export class Player {
   public readonly attackCooldown: ComputedRef<number>;
   // public readonly attributes: Map<EAttribute, Attribute>;
 
-  public readonly inventory = shallowReactive<Product<Item | Recipe>[]>([]);
+  public readonly inventory = new Inventory(MAX_INVENTORY_SIZE);
+
   public readonly attributes = reactive(
     new Map<EAttribute, Reactive<Attribute>>(),
   );
@@ -112,7 +115,7 @@ export class Player {
   /**  Gather and return all the attribute modifications from equipped items */
   public get currentModifiers() {
     const modifiers: AttributeModifier[] = [];
-    for (const item of this.inventory) {
+    for (const item of this.inventory.items) {
       modifiers.push(...item.attributes);
     }
 

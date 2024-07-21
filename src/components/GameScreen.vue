@@ -46,7 +46,7 @@
     <div></div>
     <div>
       <Inventory
-        :items="storeGame.player.inventory"
+        :items="storeGame.player.inventory.items"
         @sell="product => storeGame.sellItem(product)"
       />
     </div>

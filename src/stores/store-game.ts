@@ -11,8 +11,6 @@ import { defineStore } from 'pinia';
 import { shallowReactive, shallowReadonly, shallowRef } from 'vue';
 /**  Pinia store that manages items and shops */
 
-const MAX_INVENTORY_SIZE = 6;
-
 export const useStoreGame = defineStore('storeGame', () => {
   // Creating all the items and giving them their attributes. Probably not perfectly balanced
   const iSwordAnc = new Item('Ancient Sword', 200, [
@@ -166,66 +164,18 @@ export const useStoreGame = defineStore('storeGame', () => {
       return;
     }
 
-    if (player.inventory.length >= MAX_INVENTORY_SIZE) {
+    if (player.inventory.items.length >= player.inventory.maxLength) {
       alert("Can't carry more items");
       return;
     }
 
     player.currentGold.value -= product.goldCost;
-    addItem(product);
-  }
-
-  function addItem(product: ProductAny) {
-    player.inventory.push(product.clone());
-    checkRecipes();
-  }
-
-  /**  Checking if we have any recipes */
-  function checkRecipes() {
-    const recipies = player.inventory.filter(
-      (product): product is Recipe => product instanceof Recipe,
-    );
-    const productNames = player.inventory.map(product => product.name);
-    for (const recipe of recipies) {
-      console.log('Recipe found');
-      tryAssemblingItem(recipe, productNames);
-    }
-  }
-
-  /**  Checking if we have all the parts for any of the multi-parts items */
-  function tryAssemblingItem(recipe: Recipe, productNames: string[]) {
-    const allPartPresent = recipe.parts.every(part =>
-      productNames.includes(part.name),
-    );
-
-    if (!allPartPresent) return;
-
-    console.log(`Finished recipe found: ${recipe.name}. Combining...`);
-    for (const part of recipe.parts) {
-      removeItemByName(part.name);
-    }
-    addItem(recipe.result);
-    removeItem(recipe);
+    player.inventory.addItem(product);
   }
 
   function sellItem(product: ProductAny) {
     player.currentGold.value += Math.round(product.goldCost / 2);
-    removeItem(product);
-  }
-
-  function removeItem(product: ProductAny) {
-    const itemIndex = player.inventory.indexOf(product);
-    if (itemIndex === -1) {
-      console.log('Item not found');
-      return;
-    }
-    player.inventory.splice(itemIndex, 1);
-  }
-
-  function removeItemByName(productName: string) {
-    const item = player.inventory.find(product => product.name === productName);
-    if (!item) return;
-    removeItem(item);
+    player.inventory.removeItem(product);
   }
 
   function selectShop(shop: Shop) {
