@@ -1,15 +1,17 @@
 import { EAttribute, EModifierType } from '@/enums';
-import { Attribute } from '@/models';
+import { AttributeModifier } from '@/models';
+
 import {
   ComputedRef,
   Reactive,
+  ShallowReactive,
   computed,
   reactive,
   shallowReactive,
   shallowRef,
   watchEffect,
 } from 'vue';
-import { AttributeModifier } from '.';
+import { Attribute } from '.';
 import { Inventory } from './inventory';
 
 const MAX_INVENTORY_SIZE = 6;
@@ -29,6 +31,9 @@ export class Player {
   public readonly CritDPS: ComputedRef<number>;
   public readonly attackCooldown: ComputedRef<number>;
   // public readonly attributes: Map<EAttribute, Attribute>;
+
+  public readonly baseAttributes: Map<EAttribute, number>;
+  public /*readonly*/ attributeModifiers: ShallowReactive<AttributeModifier[]>;
 
   public readonly inventory = new Inventory(MAX_INVENTORY_SIZE);
 
@@ -105,6 +110,67 @@ export class Player {
           ((this.critChance.result / 100) * (this.critDamage.result - 1))
       );
     });
+
+    this.baseAttributes = new Map<EAttribute, number>();
+    this.baseAttributes.set(EAttribute.STRENGTH, 10);
+    this.baseAttributes.set(EAttribute.AGILITY, 10);
+
+    this.attributeModifiers = reactive([
+      new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, 5),
+      new AttributeModifier(EAttribute.AGILITY, EModifierType.PERCENTAGE, 100),
+    ]);
+  }
+
+  public get resultingStrength() {
+    const modifiers = this.findRelevantModifiers(
+      EAttribute.STRENGTH,
+      this.attributeModifiers,
+    );
+    return this.calculateResultingAttribute(
+      this.baseAttributes.get(EAttribute.STRENGTH) ?? 0,
+      modifiers,
+    );
+  }
+
+  private findRelevantModifiers(
+    attribute: EAttribute,
+    attributeModifiers: ShallowReactive<AttributeModifier[]>,
+  ): AttributeModifier[] {
+    const modifiers: AttributeModifier[] = [];
+    for (const modifier of attributeModifiers) {
+      if (modifier.attribute === attribute) modifiers.push(modifier);
+    }
+
+    return modifiers;
+  }
+
+  private calculateResultingAttribute(
+    base: number,
+    modifiers: AttributeModifier[],
+  ) {
+    const additions: number[] = [];
+    const percentages: number[] = [];
+    const multipliers: number[] = [];
+    for (const modifier of modifiers) {
+      switch (modifier.modifierType) {
+        case EModifierType.INCREASE:
+          additions.push(modifier.value);
+          break;
+
+        case EModifierType.PERCENTAGE:
+          percentages.push(modifier.value);
+          break;
+
+        case EModifierType.MULTIPLIER:
+          multipliers.push(modifier.value);
+          break;
+      }
+    }
+    let result = base;
+    result += additions.reduce((a, b) => a + b, 0);
+    result += result * (percentages.reduce((a, b) => a + b, 0) / 100);
+    result *= multipliers.reduce((a, b) => a * b, 1);
+    return result;
   }
 
   /** This function allows us to create reactive instances of this class */
