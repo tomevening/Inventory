@@ -11,7 +11,7 @@
 
   function assignColor(attributeName: EAttribute) {
     const attribute = props.player.resultingAttributes.get(attributeName);
-    const baseAttribute = props.player.baseAttributes.get(attributeName);
+    const baseAttribute = props.player.baseAttributes.get(attributeName)?.value;
     if (attribute === undefined || baseAttribute === undefined) return;
 
     return baseAttribute < attribute

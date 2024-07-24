@@ -1,121 +1,43 @@
 import { EAttribute, EModifierType } from '@/enums';
 import { AttributeModifier } from '@/models';
+import { BaseAttribute } from '@/types';
 
-import { Reactive, ShallowReactive, shallowReactive, shallowRef } from 'vue';
+import {
+  Reactive,
+  ShallowReactive,
+  ShallowRef,
+  shallowReactive,
+  shallowRef,
+} from 'vue';
 import { Attribute } from '.';
 import { Inventory } from './inventory';
 
 const MAX_INVENTORY_SIZE = 6;
 export class Player {
-  // public readonly strength: Reactive<Attribute>;
-  // public readonly health: Reactive<Attribute>;
-  // public readonly agility: Reactive<Attribute>;
-  // public readonly armor: Reactive<Attribute>;
-  // public readonly attackSpeed: Reactive<Attribute>;
-  // public readonly intelligence: Reactive<Attribute>;
-  // public readonly mana: Reactive<Attribute>;
-  // public readonly critChance: Reactive<Attribute>;
-  // public readonly critDamage: Reactive<Attribute>;
-  // public readonly damage: Reactive<Attribute>;
-  /**  Damage per second is not a full-fledged attribute, it is calculated based on dmg and AS */
-  // public readonly DPS: ComputedRef<number>;
-  // public readonly CritDPS: ComputedRef<number>;
-  // public readonly attackCooldown: ComputedRef<number>;
-  // public readonly attributes: Map<EAttribute, Attribute>;
-
-  public readonly baseAttributes: Map<EAttribute, number>;
-  // public /*readonly*/ attributeModifiers: ShallowReactive<AttributeModifier[]>;
-
+  public readonly baseAttributes: Map<EAttribute, BaseAttribute>;
   public readonly inventory = new Inventory(MAX_INVENTORY_SIZE);
-
   public readonly attributes = shallowReactive(
     new Map<EAttribute, Reactive<Attribute>>(),
   );
-  public readonly currentGold;
+  public readonly currentGold: ShallowRef<number>;
 
   private constructor() {
-    // this.attributes = new Map<EAttribute, Attribute>();  TODO: return if reactivity is not needed
-
     this.currentGold = shallowRef(1500);
 
-    // this.strength = Attribute.create(10, 0);
-    // this.attributes.set(EAttribute.STRENGTH, this.strength);
+    this.baseAttributes = new Map<EAttribute, BaseAttribute>();
+    this.baseAttributes.set(EAttribute.STRENGTH, { value: 10 });
+    this.baseAttributes.set(EAttribute.HEALTH, { value: 100, minCap: 1 });
 
-    // this.health = Attribute.create(100, 1);
-    // watchEffect(() =>
-    //   this.health.setBaseAttributeIncrement(this.strength.result * 6),
-    // );
-    // this.attributes.set(EAttribute.HEALTH, this.health);
+    this.baseAttributes.set(EAttribute.AGILITY, { value: 10 });
+    this.baseAttributes.set(EAttribute.ARMOR, { value: 5 });
+    this.baseAttributes.set(EAttribute.ATTACKSPEED, { value: 1, minCap: 0.1 });
 
-    // this.agility = Attribute.create(10, 0);
-    // this.attributes.set(EAttribute.AGILITY, this.agility);
+    this.baseAttributes.set(EAttribute.INTELLIGENCE, { value: 10 });
+    this.baseAttributes.set(EAttribute.MANA, { value: 100, minCap: 1 });
 
-    // this.armor = Attribute.create(5);
-    // watchEffect(() =>
-    //   this.armor.setBaseAttributeIncrement(this.agility.result * 0.2),
-    // );
-    // this.attributes.set(EAttribute.ARMOR, this.armor);
-
-    // this.attackSpeed = Attribute.create(1, 0.1);
-    // watchEffect(() =>
-    //   this.attackSpeed.setBaseAttributeIncrement(this.agility.result * 0.2),
-    // );
-    // this.attributes.set(EAttribute.ATTACKSPEED, this.attackSpeed);
-    // this.attackCooldown = computed(() => 1 / this.attackSpeed.result);
-
-    // this.intelligence = Attribute.create(10, 0);
-    // this.attributes.set(EAttribute.INTELLIGENCE, this.intelligence);
-
-    // this.mana = Attribute.create(100, 0);
-    // watchEffect(() =>
-    //   this.mana.setBaseAttributeIncrement(this.intelligence.result * 6),
-    // );
-    // this.attributes.set(EAttribute.MANA, this.mana);
-
-    // this.critChance = Attribute.create(10, 0, 100);
-    // this.attributes.set(EAttribute.CRITCHANCE, this.critChance);
-
-    // this.critDamage = Attribute.create(2, 1);
-    // this.attributes.set(EAttribute.CRITDMG, this.critDamage);
-
-    // this.damage = Attribute.create(10, 0);
-    // watchEffect(() =>
-    //   this.damage.setBaseAttributeIncrement(
-    //     Math.max(
-    //       this.strength.result,
-    //       this.agility.result,
-    //       this.intelligence.result,
-    //     ),
-    //   ),
-    // );
-    // this.attributes.set(EAttribute.DMG, this.damage);
-
-    // this.DPS = computed(
-    //   () => this.damage.result * (1 / this.attackCooldown.value),
-    // );
-
-    // this.CritDPS = computed(() => {
-    //   return (
-    //     this.DPS.value +
-    //     this.DPS.value *
-    //       ((this.critChance.result / 100) * (this.critDamage.result - 1))
-    //   );
-    // });
-
-    this.baseAttributes = new Map<EAttribute, number>();
-    this.baseAttributes.set(EAttribute.STRENGTH, 10);
-    this.baseAttributes.set(EAttribute.HEALTH, 100);
-
-    this.baseAttributes.set(EAttribute.AGILITY, 10);
-    this.baseAttributes.set(EAttribute.ARMOR, 5);
-    this.baseAttributes.set(EAttribute.ATTACKSPEED, 1);
-
-    this.baseAttributes.set(EAttribute.INTELLIGENCE, 10);
-    this.baseAttributes.set(EAttribute.MANA, 100);
-
-    this.baseAttributes.set(EAttribute.CRITCHANCE, 10);
-    this.baseAttributes.set(EAttribute.CRITDMG, 2);
-    this.baseAttributes.set(EAttribute.DMG, 10);
+    this.baseAttributes.set(EAttribute.CRITCHANCE, { value: 10, maxCap: 100 });
+    this.baseAttributes.set(EAttribute.CRITDMG, { value: 2 });
+    this.baseAttributes.set(EAttribute.DMG, { value: 10 });
   }
 
   /** This function allows us to create reactive instances of this class */
@@ -142,20 +64,61 @@ export class Player {
       );
       result.set(
         attribute,
-        this.calculateResultingAttribute(baseValue, modifiers),
+        this.calculateResultingAttribute(baseValue.value, modifiers),
       );
     }
 
     this.changeDependentStats(result);
+    this.applyCaps(result);
 
     return result;
   }
 
-  public get attackCooldown() {
-    // const attackSpeed = this.resultingAttributes.get(EAttribute.ATTACKSPEED);
-    // if (attackSpeed === undefined) return 1;
-    // return 1 / attackSpeed;
+  private applyCaps(modifiedAttributes: Map<EAttribute, number>) {
+    if (!this.baseAttributes) {
+      throw new Error(`baseAttributes not found`);
+    }
 
+    // Min caps
+    for (const [attribute, _] of modifiedAttributes) {
+      const baseAttribute = this.baseAttributes.get(attribute);
+      if (baseAttribute === undefined) {
+        throw new Error(`baseAttribute ${attribute} not found`);
+      }
+
+      if (!baseAttribute.minCap) continue;
+
+      const modifiedAttribute = modifiedAttributes.get(attribute);
+      if (modifiedAttribute === undefined) {
+        throw new Error(`modifiedAttribute ${attribute} not found`);
+      }
+
+      if (modifiedAttribute < baseAttribute.minCap) {
+        modifiedAttributes.set(attribute, baseAttribute.minCap);
+      }
+    }
+
+    // Max caps
+    for (const [attribute, _] of modifiedAttributes) {
+      const baseAttribute = this.baseAttributes.get(attribute);
+      if (baseAttribute === undefined) {
+        throw new Error(`baseAttribute ${attribute} not found`);
+      }
+
+      if (!baseAttribute.maxCap) continue;
+
+      const modifiedAttribute = modifiedAttributes.get(attribute);
+      if (modifiedAttribute === undefined) {
+        throw new Error(`modifiedAttribute ${attribute} not found`);
+      }
+
+      if (modifiedAttribute > baseAttribute.maxCap) {
+        modifiedAttributes.set(attribute, baseAttribute.maxCap);
+      }
+    }
+  }
+
+  public get attackCooldown() {
     return 1 / (this.resultingAttributes.get(EAttribute.ATTACKSPEED) ?? 1);
   }
 
