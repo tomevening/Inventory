@@ -10,12 +10,13 @@
   watchEffect(() => console.log(props.player.currentModifiers));
 
   function assignColor(attributeName: EAttribute) {
-    const attribute = props.player.attributes.get(attributeName);
-    if (!attribute) return;
+    const attribute = props.player.resultingAttributes.get(attributeName);
+    const baseAttribute = props.player.baseAttributes.get(attributeName);
+    if (attribute === undefined || baseAttribute === undefined) return;
 
-    return attribute.baseStat < attribute.result
+    return baseAttribute < attribute
       ? 'color: #1EB300'
-      : attribute.baseStat > attribute.result
+      : baseAttribute > attribute
       ? 'color: red'
       : 'color: black';
   }
@@ -28,8 +29,9 @@
         {{ attributeKey }} {{ attributeValue.toFixed(1) }}
       </div>
     </div>
-    <!-- <div class="mt-4">DPS: {{ player.DPS.value.toFixed(1) }}</div>
-    <div>DPS with crit: {{ player.CritDPS.value.toFixed(1) }}</div> -->
+    <div class="mt-4">DPS: {{ player.dps.toFixed(1) }}</div>
+    <div>DPS with crit: {{ player.critDps.toFixed(1) }}</div>
+    <div>Attack cooldown: {{ player.attackCooldown.toFixed(2) }}</div>
   </div>
 </template>
 

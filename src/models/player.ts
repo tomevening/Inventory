@@ -118,6 +118,11 @@ export class Player {
     this.baseAttributes.set(EAttribute.DMG, 10);
   }
 
+  /** This function allows us to create reactive instances of this class */
+  public static create() {
+    return shallowReactive(new Player());
+  }
+
   public get currentModifiers() {
     const modifiers: ShallowReactive<AttributeModifier[]> = shallowReactive([]);
     for (const item of this.inventory.items) {
@@ -141,12 +146,86 @@ export class Player {
       );
     }
 
+    this.changeDependentStats(result);
+
     return result;
+  }
+
+  public get attackCooldown() {
+    // const attackSpeed = this.resultingAttributes.get(EAttribute.ATTACKSPEED);
+    // if (attackSpeed === undefined) return 1;
+    // return 1 / attackSpeed;
+
+    return 1 / (this.resultingAttributes.get(EAttribute.ATTACKSPEED) ?? 1);
+  }
+
+  public get dps() {
+    return (
+      (this.resultingAttributes.get(EAttribute.DMG) ?? 0) *
+      (1 / this.attackCooldown)
+    );
+  }
+
+  public get critDps() {
+    const critChance = this.resultingAttributes.get(EAttribute.CRITCHANCE) ?? 0;
+    const critDamage = this.resultingAttributes.get(EAttribute.CRITDMG) ?? 0;
+    return this.dps + this.dps * ((critChance / 100) * (critDamage - 1));
+  }
+
+  private changeDependentStats(modifiedAttributes: Map<EAttribute, number>) {
+    this.modifyHealth(modifiedAttributes);
+    this.modifyMana(modifiedAttributes);
+    this.modifyArmor(modifiedAttributes);
+    this.modifyAttackSpeed(modifiedAttributes);
+    this.modifyDamage(modifiedAttributes);
+  }
+
+  private modifyHealth(modifiedAttributes: Map<EAttribute, number>) {
+    const hp = modifiedAttributes.get(EAttribute.HEALTH);
+    const str = modifiedAttributes.get(EAttribute.STRENGTH);
+    if (hp === undefined || str === undefined) return;
+    modifiedAttributes.set(EAttribute.HEALTH, hp + str * 6);
+  }
+
+  private modifyMana(modifiedAttributes: Map<EAttribute, number>) {
+    const mp = modifiedAttributes.get(EAttribute.MANA);
+    const int = modifiedAttributes.get(EAttribute.INTELLIGENCE);
+    if (mp === undefined || int === undefined) return;
+    modifiedAttributes.set(EAttribute.MANA, mp + int * 6);
+  }
+
+  private modifyArmor(modifiedAttributes: Map<EAttribute, number>) {
+    const armor = modifiedAttributes.get(EAttribute.ARMOR);
+    const agi = modifiedAttributes.get(EAttribute.AGILITY);
+    if (armor === undefined || agi === undefined) return;
+    modifiedAttributes.set(EAttribute.ARMOR, armor + agi * 0.2);
+  }
+
+  private modifyAttackSpeed(modifiedAttributes: Map<EAttribute, number>) {
+    const attackSpeed = modifiedAttributes.get(EAttribute.ATTACKSPEED);
+    const agi = modifiedAttributes.get(EAttribute.AGILITY);
+    if (attackSpeed === undefined || agi === undefined) return;
+    modifiedAttributes.set(EAttribute.ATTACKSPEED, attackSpeed + agi * 0.05);
+  }
+
+  private modifyDamage(modifiedAttributes: Map<EAttribute, number>) {
+    const dmg = modifiedAttributes.get(EAttribute.DMG);
+    const int = modifiedAttributes.get(EAttribute.INTELLIGENCE);
+    const agi = modifiedAttributes.get(EAttribute.AGILITY);
+    const str = modifiedAttributes.get(EAttribute.STRENGTH);
+    if (
+      dmg === undefined ||
+      agi === undefined ||
+      str === undefined ||
+      int === undefined
+    )
+      return;
+    modifiedAttributes.set(EAttribute.DMG, dmg + Math.max(int, str, agi));
   }
 
   private findRelevantModifiers(
     attribute: EAttribute,
-    attributeModifiers: ShallowReactive<AttributeModifier[]>, // TODO: Probably can remove it somehow
+    attributeModifiers: ShallowReactive<AttributeModifier[]>, // TODO: Probably should remove it somehow
   ): AttributeModifier[] {
     const modifiers: AttributeModifier[] = [];
     for (const modifier of attributeModifiers) {
@@ -183,10 +262,5 @@ export class Player {
     result += result * (percentages.reduce((a, b) => a + b, 0) / 100);
     result *= multipliers.reduce((a, b) => a * b, 1);
     return result;
-  }
-
-  /** This function allows us to create reactive instances of this class */
-  public static create() {
-    return shallowReactive(new Player());
   }
 }
