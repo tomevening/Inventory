@@ -1,13 +1,10 @@
 <script setup lang="ts">
   import { EAttribute } from '@/enums';
   import { Player } from '@/models';
-  import { watchEffect } from 'vue';
 
   const props = defineProps<{
     player: Player;
   }>();
-
-  watchEffect(() => console.log(props.player.currentModifiers));
 
   function assignColor(attributeName: EAttribute) {
     const attribute = props.player.resultingAttributes.get(attributeName);

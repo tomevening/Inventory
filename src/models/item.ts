@@ -12,7 +12,7 @@ export class Item extends Product<Item> {
     console.log(`Item ${this.name} created`);
   }
 
-  //  We buy items by cloning them into player's inventory
+  //  Buying an item clones it into an inventory.
   public clone(): Item {
     return new Item(this.name, this.goldCost, this.attributes);
   }

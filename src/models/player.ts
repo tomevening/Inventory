@@ -2,23 +2,14 @@ import { EAttribute, EModifierType } from '@/enums';
 import { AttributeModifier } from '@/models';
 import { BaseAttribute } from '@/types';
 
-import {
-  Reactive,
-  ShallowReactive,
-  ShallowRef,
-  shallowReactive,
-  shallowRef,
-} from 'vue';
-import { Attribute } from '.';
+import { ShallowReactive, ShallowRef, shallowReactive, shallowRef } from 'vue';
+
 import { Inventory } from './inventory';
 
 const MAX_INVENTORY_SIZE = 6;
 export class Player {
   public readonly baseAttributes: Map<EAttribute, BaseAttribute>;
   public readonly inventory = new Inventory(MAX_INVENTORY_SIZE);
-  public readonly attributes = shallowReactive(
-    new Map<EAttribute, Reactive<Attribute>>(),
-  );
   public readonly currentGold: ShallowRef<number>;
 
   private constructor() {
@@ -40,88 +31,30 @@ export class Player {
     this.baseAttributes.set(EAttribute.DMG, { value: 10 });
   }
 
-  /** This function allows us to create reactive instances of this class */
+  /** Creates reactive instances of this class */
   public static create() {
     return shallowReactive(new Player());
   }
 
-  public get currentModifiers() {
-    const modifiers: ShallowReactive<AttributeModifier[]> = shallowReactive([]);
-    for (const item of this.inventory.items) {
-      modifiers.push(...item.attributes);
-    }
-    console.log(modifiers);
-    return modifiers;
-  }
-
+  /** Returns attributes after applying item bonuses, increases from other stats and min/max caps */
   public get resultingAttributes() {
     const result = new Map<EAttribute, number>();
 
     for (const [attribute, baseValue] of this.baseAttributes) {
-      const modifiers = this.findRelevantModifiers(
-        attribute,
-        this.currentModifiers,
-      );
+      const modifiers = this.findRelevantModifiers(attribute);
       result.set(
         attribute,
         this.calculateResultingAttribute(baseValue.value, modifiers),
       );
     }
 
-    this.changeDependentStats(result);
+    this.addStatsFromDependencies(result);
     this.applyCaps(result);
 
     return result;
   }
 
-  private applyCaps(modifiedAttributes: Map<EAttribute, number>) {
-    if (!this.baseAttributes) {
-      throw new Error(`baseAttributes not found`);
-    }
-
-    // Min caps
-    for (const [attribute, _] of modifiedAttributes) {
-      const baseAttribute = this.baseAttributes.get(attribute);
-      if (baseAttribute === undefined) {
-        throw new Error(`baseAttribute ${attribute} not found`);
-      }
-
-      if (!baseAttribute.minCap) continue;
-
-      const modifiedAttribute = modifiedAttributes.get(attribute);
-      if (modifiedAttribute === undefined) {
-        throw new Error(`modifiedAttribute ${attribute} not found`);
-      }
-
-      if (modifiedAttribute < baseAttribute.minCap) {
-        modifiedAttributes.set(attribute, baseAttribute.minCap);
-      }
-    }
-
-    // Max caps
-    for (const [attribute, _] of modifiedAttributes) {
-      const baseAttribute = this.baseAttributes.get(attribute);
-      if (baseAttribute === undefined) {
-        throw new Error(`baseAttribute ${attribute} not found`);
-      }
-
-      if (!baseAttribute.maxCap) continue;
-
-      const modifiedAttribute = modifiedAttributes.get(attribute);
-      if (modifiedAttribute === undefined) {
-        throw new Error(`modifiedAttribute ${attribute} not found`);
-      }
-
-      if (modifiedAttribute > baseAttribute.maxCap) {
-        modifiedAttributes.set(attribute, baseAttribute.maxCap);
-      }
-    }
-  }
-
-  public get attackCooldown() {
-    return 1 / (this.resultingAttributes.get(EAttribute.ATTACKSPEED) ?? 1);
-  }
-
+  /** DPS - damage per second. */
   public get dps() {
     return (
       (this.resultingAttributes.get(EAttribute.DMG) ?? 0) *
@@ -129,13 +62,21 @@ export class Player {
     );
   }
 
+  /** DPS with criticals */
   public get critDps() {
     const critChance = this.resultingAttributes.get(EAttribute.CRITCHANCE) ?? 0;
     const critDamage = this.resultingAttributes.get(EAttribute.CRITDMG) ?? 0;
     return this.dps + this.dps * ((critChance / 100) * (critDamage - 1));
   }
 
-  private changeDependentStats(modifiedAttributes: Map<EAttribute, number>) {
+  public get attackCooldown() {
+    return 1 / (this.resultingAttributes.get(EAttribute.ATTACKSPEED) ?? 1);
+  }
+
+  /** Some attributes increase other attributes. These increases are applied here */
+  private addStatsFromDependencies(
+    modifiedAttributes: Map<EAttribute, number>,
+  ) {
     this.modifyHealth(modifiedAttributes);
     this.modifyMana(modifiedAttributes);
     this.modifyArmor(modifiedAttributes);
@@ -186,18 +127,27 @@ export class Player {
     modifiedAttributes.set(EAttribute.DMG, dmg + Math.max(int, str, agi));
   }
 
-  private findRelevantModifiers(
-    attribute: EAttribute,
-    attributeModifiers: ShallowReactive<AttributeModifier[]>, // TODO: Probably should remove it somehow
-  ): AttributeModifier[] {
+  /** Returns all bonuses granted by equipped items */
+  private get currentModifiers() {
+    const modifiers: ShallowReactive<AttributeModifier[]> = shallowReactive([]);
+    for (const item of this.inventory.items) {
+      modifiers.push(...item.attributes);
+    }
+    console.log(modifiers);
+    return modifiers;
+  }
+
+  /** Return all active bonuses to a selected attribute */
+  private findRelevantModifiers(attribute: EAttribute): AttributeModifier[] {
     const modifiers: AttributeModifier[] = [];
-    for (const modifier of attributeModifiers) {
+    for (const modifier of this.currentModifiers) {
       if (modifier.attribute === attribute) modifiers.push(modifier);
     }
 
     return modifiers;
   }
 
+  /** Calculates resulting value of a chosen attribute (including base values and item bonuses) */
   private calculateResultingAttribute(
     base: number,
     modifiers: AttributeModifier[],
@@ -225,5 +175,50 @@ export class Player {
     result += result * (percentages.reduce((a, b) => a + b, 0) / 100);
     result *= multipliers.reduce((a, b) => a * b, 1);
     return result;
+  }
+
+  /** Some attributes have min and max values. Here these caps are applied */
+  private applyCaps(modifiedAttributes: Map<EAttribute, number>) {
+    if (!this.baseAttributes) {
+      throw new Error(`baseAttributes not found`);
+    }
+
+    // Min caps
+    for (const [attribute, _] of modifiedAttributes) {
+      const baseAttribute = this.baseAttributes.get(attribute);
+      if (baseAttribute === undefined) {
+        throw new Error(`baseAttribute ${attribute} not found`);
+      }
+
+      if (!baseAttribute.minCap) continue;
+
+      const modifiedAttribute = modifiedAttributes.get(attribute);
+      if (modifiedAttribute === undefined) {
+        throw new Error(`modifiedAttribute ${attribute} not found`);
+      }
+
+      if (modifiedAttribute < baseAttribute.minCap) {
+        modifiedAttributes.set(attribute, baseAttribute.minCap);
+      }
+    }
+
+    // Max caps
+    for (const [attribute, _] of modifiedAttributes) {
+      const baseAttribute = this.baseAttributes.get(attribute);
+      if (baseAttribute === undefined) {
+        throw new Error(`baseAttribute ${attribute} not found`);
+      }
+
+      if (!baseAttribute.maxCap) continue;
+
+      const modifiedAttribute = modifiedAttributes.get(attribute);
+      if (modifiedAttribute === undefined) {
+        throw new Error(`modifiedAttribute ${attribute} not found`);
+      }
+
+      if (modifiedAttribute > baseAttribute.maxCap) {
+        modifiedAttributes.set(attribute, baseAttribute.maxCap);
+      }
+    }
   }
 }
