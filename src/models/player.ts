@@ -1,6 +1,6 @@
 import { EAttribute } from '@/enums';
 import { AttributeModifier } from '@/models';
-import { BaseAttribute } from '@/types';
+import { Attribute, BaseAttribute } from '@/types';
 
 import {
   ComputedRef,
@@ -28,8 +28,8 @@ export class Player {
     ShallowRef<BaseAttribute> | ComputedRef<BaseAttribute>
   >;
 
-  public readonly strength: ComputedRef<number>;
-  public readonly health: ComputedRef<number>;
+  public readonly strength: Attribute;
+  public readonly health: Attribute;
 
   private constructor() {
     // public readonly baseHealth = { id: EAttribute.STRENGTH, value: 100 }, // public readonly strength?: ComputedRef<number>, // public readonly baseStrength = { id: EAttribute.STRENGTH, value: 10 }, // public readonly health?: ComputedRef<number>,
@@ -56,8 +56,8 @@ export class Player {
     });
     this.baseHealth = computed(() => ({
       attribute: EAttribute.STRENGTH,
-      value: 100 + this.strength.value * 6,
-      maxCap: 150,
+      value: 100 + this.strength.value.attribute * 6,
+      maxCap: 200,
     }));
 
     this.baseAttributes = new Map([
