@@ -1,10 +1,13 @@
 <script setup lang="ts">
   import { ProductAny } from '@/models';
+  import { watchEffect } from 'vue';
   import Item from './Item.vue';
 
-  defineProps<{
+  const props = defineProps<{
     items: ProductAny[];
   }>();
+
+  watchEffect(() => console.log(props.items));
 
   const emit = defineEmits<{
     (event: 'sell', product: ProductAny): void;

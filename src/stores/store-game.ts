@@ -159,7 +159,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   // Initialization ends here
 
   function buyItem(product: ProductAny) {
-    if (product.goldCost > player.currentGold.value) {
+    if (product.goldCost > player.currentGold) {
       alert('Not enough gold to buy!');
       return;
     }
@@ -169,12 +169,12 @@ export const useStoreGame = defineStore('storeGame', () => {
       return;
     }
 
-    player.currentGold.value -= product.goldCost;
+    player.currentGold -= product.goldCost;
     player.inventory.addItem(product);
   }
 
   function sellItem(product: ProductAny) {
-    player.currentGold.value += Math.round(product.goldCost / 2);
+    player.currentGold += Math.round(product.goldCost / 2);
     player.inventory.removeItem(product);
   }
 

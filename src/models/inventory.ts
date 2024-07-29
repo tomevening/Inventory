@@ -7,6 +7,14 @@ export class Inventory {
     public readonly items = shallowReactive<ProductAny[]>([]),
   ) {}
 
+  // /** Creates reactive instances of this class */
+  // public static create(
+  //   maxLength: number,
+  //   items = shallowReactive<ProductAny[]>([]),
+  // ) {
+  //   return reactive(new Inventory(maxLength, items));
+  // }
+
   public addItem(product: ProductAny) {
     this.items.push(product.clone());
     this.checkRecipes();
