@@ -78,6 +78,7 @@ export const useStoreGame = defineStore('storeGame', () => {
   const iMiscBookKnow = new Item('Book of Knowledge', 60, [
     new AttributeModifier(EAttribute.INTELLIGENCE, EModifierType.INCREASE, 5),
     new AttributeModifier(EAttribute.MANA, EModifierType.PERCENTAGE, 15),
+    new AttributeModifier(EAttribute.STRENGTH, EModifierType.INCREASE, -3),
   ]);
   const iMiscEmRing = new Item('Emerald Ring', 80, [
     new AttributeModifier(EAttribute.HEALTH, EModifierType.INCREASE, 60),

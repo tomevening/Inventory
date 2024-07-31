@@ -11,32 +11,31 @@ export function useModifyAttribute(
     const additions: number[] = [];
     const percentages: number[] = [];
     const multipliers: number[] = [];
+    const base = toValue(baseAttribute);
 
     for (const modifier of modifiers.value) {
       switch (modifier.modifierType) {
         case EModifierType.INCREASE:
-          additions.push(modifier.value);
+          if (modifier.attribute === base.type) additions.push(modifier.value);
           break;
 
         case EModifierType.PERCENTAGE:
-          percentages.push(modifier.value);
+          if (modifier.attribute === base.type)
+            percentages.push(modifier.value);
           break;
 
         case EModifierType.MULTIPLIER:
-          multipliers.push(modifier.value);
+          if (modifier.attribute === base.type)
+            multipliers.push(modifier.value);
           break;
       }
     }
-    console.log(`Mods: `, modifiers);
 
-    const base = toValue(baseAttribute);
-    let attribute = base.value;
+    let attribute = toValue(base.value);
     attribute += additions.reduce((a, b) => a + b, 0);
     attribute += attribute * (percentages.reduce((a, b) => a + b, 0) / 100);
     attribute *= multipliers.reduce((a, b) => a * b, 1);
     attribute = applyCaps(attribute, base);
-
-    console.log('Attribute', attribute);
     return { base, attribute };
   });
 }
