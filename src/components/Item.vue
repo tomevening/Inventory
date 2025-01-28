@@ -12,10 +12,10 @@
     <img
       :alt="item.name"
       class="h-20"
+      :src="item.icon"
       :style="{
         filter: item instanceof Recipe ? 'brightness(50%)' : '',
       }"
-      :src="item.icon"
     />
   </Tooltip>
 </template>

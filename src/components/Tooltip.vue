@@ -38,8 +38,8 @@
 
 <template>
   <div
-    class="relative inline-block"
     ref="tooltipRef"
+    class="relative inline-block"
   >
     <slot></slot>
     <div
@@ -54,21 +54,22 @@
       <div class="inline-block text-yellow-400">{{ item.goldCost }} Gold</div>
 
       <div
-        v-for="attribute in item.getAttributeModifiers()"
-        :key="item.id"
+        v-for="(attribute, index) in item.getAttributeModifiers()"
+        :key="index"
       >
         {{ showAttribute(attribute) }}
       </div>
 
       <div
-        class="text-blue-700"
         v-if="showParts(item).length > 0"
+        class="text-blue-700"
       >
         Parts:
       </div>
       <div
+        v-for="(name, index) in showParts(item)"
+        :key="index"
         class="italic"
-        v-for="name in showParts(item)"
       >
         {{ name }}
       </div>
