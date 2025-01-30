@@ -1,6 +1,6 @@
 # DotA-type Inventory and Characteristics
 
-![Demo Video](https://youtu.be/6VOYSzR7_54)
+[![Demo Video](https://img.https://youtu.be/6VOYSzR7_54/maxresdefault.jpg)](https://youtu.be/6VOYSzR7_54)
 
 ## Overview
 
